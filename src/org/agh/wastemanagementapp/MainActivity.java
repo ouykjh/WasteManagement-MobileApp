@@ -1,15 +1,27 @@
 package org.agh.wastemanagementapp;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+import com.esri.android.map.MapView;
 
 public class MainActivity extends Activity {
-
+	
+	Button btnFollowRoute;
+	Button btnSendToDatabase;
+	Button btnSettings;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
+		initUIElements();
+		initButtonsOnClickListeners();
 	}
 
 	@Override
@@ -19,4 +31,45 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	private void initUIElements(){
+		btnFollowRoute = (Button) findViewById(R.id.btnFollowRoute);
+		btnSendToDatabase = (Button) findViewById(R.id.btnSendSavedData);
+		btnSettings = (Button) findViewById(R.id.btnSettings);
+	}
+	
+	private void initButtonsOnClickListeners(){
+		OnClickListener onClickListener = new OnClickListener(){
+			public void onClick(View v){
+				switch (v.getId()){
+				case R.id.btnFollowRoute:
+					openMap();
+					break;
+				case R.id.btnSendSavedData:
+					openDatabase(); 
+					break;
+				case R.id.btnSettings:
+					openSettings(); 
+					break;
+				default:
+					break;
+				}
+			}
+		};
+		btnFollowRoute.setOnClickListener(onClickListener);
+		btnSendToDatabase.setOnClickListener(onClickListener);
+		btnSettings.setOnClickListener(onClickListener);
+	}
+	
+	private void openSettings(){
+		Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+		startActivity(intent);
+	}
+	private void openMap(){
+		Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+		startActivity(intent);
+	}
+	private void openDatabase(){
+		Intent intent = new Intent(getApplicationContext(), DatabaseViewActivity.class);
+		startActivity(intent);
+	}
 }
