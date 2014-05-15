@@ -20,6 +20,7 @@ public class MapActivity extends Activity {
 			map = (MapView)findViewById(R.id.map);
 			map.addLayer(new ArcGISTiledMapServiceLayer("" +
 			"http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"));
+			map.enableWrapAround(true);
 			//map.centerAt(29.959, 50.060, false);
 			com.esri.core.geometry.Point centerPt = new com.esri.core.geometry.Point(29.959, 50.060);
 			map.zoomToScale(centerPt, 100.00);
