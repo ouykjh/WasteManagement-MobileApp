@@ -1,5 +1,7 @@
 package org.agh.wastemanagementapp;
 
+import org.agh.map.managament.PointManagament;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -65,7 +67,9 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	private void openMap(){
-		Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+		Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+		if (PointManagament.pointsList.isEmpty())
+			intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
 		startActivity(intent);
 	}
 	private void openDatabase(){

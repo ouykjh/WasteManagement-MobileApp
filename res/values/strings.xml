@@ -10,5 +10,25 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_database_view">DatabaseViewActivity</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="retrieving_data">Pobieranie danych...</string>
+    
+    <string name="menu_settings">Ustawienia</string>
+    <string name="pref_send_formular">Wysyłanie formularzy</string>
+    <string name="pref_send_formular_summary">Wysyłanie formularzy natychmiast po wypełnieniu</string>
+    <string name="pref_send_report">Wysyłanie raportów</string>
+    <string name="pref_send_report_summary">Wysyłanie raportów natychmiast po wypełnieniu</string>
+    <string name="pref_sync_frequency">Częstotliwość synchronizacji</string>
+    <string name="pref_sync_frequency_summary">Ustaw częstotliwość synchronizacji</string>
+    <string name="pref_host_ip_summary">Ustaw IP</string>
+    <string name="pref_host_ip">IP serwera</string>
+    <string name="pref_port">Port</string>
+    <string name="pref_port_summary">Ustaw port</string>
+    <string name="pref_route_summary">Ustaw id trasy</string>
+    <string name="pref_route">Trasa</string>
+    
+     
+    <string name="pref_connection">Parametry połączenia</string>
+    <string name="pref_sync_setting">Ustawienia synchronizacji</string>
 
 </resources>

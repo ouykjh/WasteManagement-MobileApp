@@ -44,7 +44,7 @@ public class PointManagament {
 	}
 	
 	public static void markPoints(MapView map, GraphicsLayer graphicsLayer){
-		dummyData();
+		//dummyData();
 		
 		SimpleLineSymbol lineSymbol = new SimpleLineSymbol(state.getLineColor() , 3, SimpleLineSymbol.STYLE.DASH);
 		Polyline lineGeometry = new Polyline();
