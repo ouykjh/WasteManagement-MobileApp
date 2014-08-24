@@ -18,7 +18,6 @@ public class PointManagament {
 	
 	public static List<AddressPoint> pointsList = new ArrayList<AddressPoint>();
 	private static final float size = 20.0f;
-	static GlobalState state = new GlobalState();
 	
 	public static void dummyData(){
 		pointsList.add(new AddressPoint(19.914221019, 50.06707139,  "ulica Miechowska 5, 30-055 Krakow"));
@@ -46,7 +45,7 @@ public class PointManagament {
 	public static void markPoints(MapView map, GraphicsLayer graphicsLayer){
 		//dummyData();
 		
-		SimpleLineSymbol lineSymbol = new SimpleLineSymbol(state.getLineColor() , 3, SimpleLineSymbol.STYLE.DASH);
+		SimpleLineSymbol lineSymbol = new SimpleLineSymbol(GlobalState.lineColor , 3, SimpleLineSymbol.STYLE.DASH);
 		Polyline lineGeometry = new Polyline();
 		
 		Point point = new Point();
@@ -57,12 +56,12 @@ public class PointManagament {
 		boolean flag = false;
 		
 		for( AddressPoint addressPoint : pointsList ){
-			SimpleMarkerSymbol resultSymbol = new SimpleMarkerSymbol( state.getNotVisitedColor() , 20, SimpleMarkerSymbol.STYLE.DIAMOND );
-			resultSymbol.setColor( state.getNotVisitedColor() );
+			SimpleMarkerSymbol resultSymbol = new SimpleMarkerSymbol( GlobalState.notVisitedColor , 20, SimpleMarkerSymbol.STYLE.DIAMOND );
+			resultSymbol.setColor( GlobalState.notVisitedColor );
 			resultSymbol.setSize( size );
-			resultSymbol.setStyle( state.getStyle() );
+			resultSymbol.setStyle( GlobalState.style );
 			Graphic resultLocation = new Graphic( PointManagament.toWebMercator( addressPoint.getPoint() ), resultSymbol );
-			TextSymbol txtSymbol = new TextSymbol( 10, addressPoint.getAddress(), state.getTextColor() );
+			TextSymbol txtSymbol = new TextSymbol( 10, addressPoint.getAddress(), GlobalState.textColor );
 			Graphic gr = new Graphic( PointManagament.toWebMercator( addressPoint.getPoint() ) , txtSymbol );
 			graphicsLayer.addGraphic( gr );
 			

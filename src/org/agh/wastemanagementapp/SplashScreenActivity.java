@@ -21,6 +21,7 @@ public class SplashScreenActivity extends Activity {
 	private String port;
 	private String url;
 	private String routeID;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

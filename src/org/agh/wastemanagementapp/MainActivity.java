@@ -1,16 +1,21 @@
 package org.agh.wastemanagementapp;
 
+import java.io.UnsupportedEncodingException;
+import java.util.concurrent.ExecutionException;
+
+import org.agh.connector.Tracker;
 import org.agh.map.managament.PointManagament;
+import org.json.JSONException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
-import com.esri.android.map.MapView;
 
 public class MainActivity extends Activity {
 	
@@ -24,6 +29,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main_layout);
 		initUIElements();
 		initButtonsOnClickListeners();
+		startTracking();
 	}
 
 	@Override
@@ -31,6 +37,27 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	private void startTracking() {
+		
+		LocationManager locationManager = (LocationManager)
+		getSystemService(Context.LOCATION_SERVICE);
+		
+		Tracker tracker = new Tracker("http://192.168.0.101:8000", locationManager, getApplicationContext());
+		
+		try {
+			tracker.initTrackingRoute();
+			tracker.sendLocation();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initUIElements(){
