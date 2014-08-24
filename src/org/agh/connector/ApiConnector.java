@@ -78,20 +78,17 @@ public class ApiConnector {
 			post.setEntity(se);
 			HttpResponse response = client.execute(post);
 			String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
-			System.out.println("Post status: " + responseString);
+			
+			//TODO should always return some kind of response... 
 			if( responseString.length() != 0 ){
 				JSONObject obj = new JSONObject(responseString);
 				return obj;
 			}
-
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

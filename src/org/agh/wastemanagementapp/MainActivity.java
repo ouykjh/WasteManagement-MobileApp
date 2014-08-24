@@ -39,12 +39,12 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	//TODO SERVER ADDRESS SHOULD BE KNOWN SOMEHOW
 	private void startTracking() {
+		String serverAddress = "http://192.168.0.101:8000";
 		
-		LocationManager locationManager = (LocationManager)
-		getSystemService(Context.LOCATION_SERVICE);
-		
-		Tracker tracker = new Tracker("http://192.168.0.101:8000", locationManager, getApplicationContext());
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		Tracker tracker = new Tracker(serverAddress, locationManager);
 		
 		try {
 			tracker.initTrackingRoute();
@@ -93,14 +93,17 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
 		startActivity(intent);
 	}
+	
 	private void openMap(){
 		Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
 		if (PointManagament.pointsList.isEmpty())
 			intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
 		startActivity(intent);
 	}
+	
 	private void openDatabase(){
 		Intent intent = new Intent(getApplicationContext(), DatabaseViewActivity.class);
 		startActivity(intent);
 	}
+
 }
