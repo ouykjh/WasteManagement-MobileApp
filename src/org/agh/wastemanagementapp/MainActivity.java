@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 		String serverAddress = "http://192.168.0.101:8000";
 		
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Tracker tracker = new Tracker(serverAddress, locationManager);
+		Tracker tracker = new Tracker(serverAddress, locationManager, getApplicationContext());
 		
 		try {
 			tracker.initTrackingRoute();

@@ -6,17 +6,98 @@ import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
 import android.graphics.Color;
 
 public class GlobalState  {
-	public static int notVisitedColor = Color.WHITE;
-	public static int visitedColor = Color.BLUE;
-	public static int nextColor = Color.RED;
-	public static int lineColor = Color.GREEN;
-	public static int textColor = Color.MAGENTA;
-	public static STYLE style = (STYLE) SimpleMarkerSymbol.STYLE.DIAMOND;
-	public static int textSize = 10;
+	
+	//Singleton
+	private static final GlobalState instance = new GlobalState();
+	
+	public static GlobalState getInstance() {
+		return instance;
+	}
+	
+	private int notVisitedColor = Color.WHITE;
+	private int visitedColor = Color.BLUE;
+	private int nextColor = Color.RED;
+	private int lineColor = Color.GREEN;
+	private int textColor = Color.MAGENTA;
+	private STYLE style = (STYLE) SimpleMarkerSymbol.STYLE.DIAMOND;
+	private int textSize = 10;
 	
 	//minTime minimum time interval between location updates, in milliseconds
-	public static long timeIntervalLoctionUpdate = 5000; 
+	private long timeIntervalLoctionUpdate = 5000; 
 	
 	//minDistance minimum distance between location updates, in meters
-	public static long minDistanceBetweenLocationUpdate = 5;
+	private long minDistanceBetweenLocationUpdate = 5;
+	
+	public int getNotVisitedColor() {
+		return notVisitedColor;
+	}
+
+	public void setNotVisitedColor(int notVisitedColor) {
+		this.notVisitedColor = notVisitedColor;
+	}
+
+	public int getVisitedColor() {
+		return visitedColor;
+	}
+
+	public void setVisitedColor(int visitedColor) {
+		this.visitedColor = visitedColor;
+	}
+
+	public int getNextColor() {
+		return nextColor;
+	}
+
+	public void setNextColor(int nextColor) {
+		this.nextColor = nextColor;
+	}
+
+	public int getLineColor() {
+		return lineColor;
+	}
+
+	public void setLineColor(int lineColor) {
+		this.lineColor = lineColor;
+	}
+
+	public int getTextColor() {
+		return textColor;
+	}
+
+	public void setTextColor(int textColor) {
+		this.textColor = textColor;
+	}
+
+	public STYLE getStyle() {
+		return style;
+	}
+
+	public void setStyle(STYLE style) {
+		this.style = style;
+	}
+
+	public int getTextSize() {
+		return textSize;
+	}
+
+	public void setTextSize(int textSize) {
+		this.textSize = textSize;
+	}
+
+	public long getTimeIntervalLoctionUpdate() {
+		return timeIntervalLoctionUpdate;
+	}
+
+	public void setTimeIntervalLoctionUpdate(long timeIntervalLoctionUpdate) {
+		this.timeIntervalLoctionUpdate = timeIntervalLoctionUpdate;
+	}
+
+	public long getMinDistanceBetweenLocationUpdate() {
+		return minDistanceBetweenLocationUpdate;
+	}
+
+	public void setMinDistanceBetweenLocationUpdate(
+			long minDistanceBetweenLocationUpdate) {
+		this.minDistanceBetweenLocationUpdate = minDistanceBetweenLocationUpdate;
+	}
 }

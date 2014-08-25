@@ -1,6 +1,9 @@
 package org.agh.connector;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,6 +12,9 @@ import org.agh.map.managament.GlobalState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,12 +26,15 @@ public class Tracker {
 	
 	private final ApiConnector API_CONNECTOR;
 	private final LocationManager LOCATION_MANAGER;
-	private final String POINT_PATH_API = "/api/point/";
+	private final String POINT_API_PATH = "/api/point/";
+	private Context context;
 	private int routeId;
+	private GlobalState globalState = GlobalState.getInstance();
 	
-	public Tracker(String url, LocationManager locationManager){
+	public Tracker(String url, LocationManager locationManager, Context context){
 		API_CONNECTOR = new ApiConnector(url);
 		this.LOCATION_MANAGER = locationManager;
+		this.context = context;
 	}
 	
 	private void setRouteId(int routeId){
@@ -59,10 +68,8 @@ public class Tracker {
 			try {
 				postPoints(params[0]);
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return null;
@@ -88,6 +95,21 @@ public class Tracker {
 		return(Integer.parseInt(m.group()));
 	}
 	
+	private Address getAddressFromLocation(Location location){
+		Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+		List<Address> addresses = null;
+		try {
+			addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (addresses != null && addresses.size() > 0) {
+			return addresses.get(0);
+		}
+		return null;
+	}
+	
 	private class MyLocationListener implements LocationListener {
 		
 	    @Override
@@ -97,9 +119,10 @@ public class Tracker {
 	    		Log.w("TRACKER", "Location of the device is unknown");
 	    	}else{
 		        Log.i("TRACKER", "Sending location: latitude: " + location.getLatitude() + " longitude " + location.getLongitude());
-		        
+		        Address address = getAddressFromLocation(location);
 				JSONObject pointJson = new JSONObject();
 				try {
+					Log.i("TRACKER", "CITY " + address.getSubLocality() + "POSTAL " + address.getPostalCode() + "CITY " + address.getLocality());
 					TrackingDataCreator.createAddressData("Kochanowskiego", "16", "33-330", "Grybow");
 					TrackingDataCreator.createPointsData( routeId, Double.toString(location.getLatitude()), Double.toString(location.getLongitude()) );
 					TrackingDataCreator.accumulatePointData(pointJson);
@@ -122,14 +145,14 @@ public class Tracker {
 
 
 	private void postPoints(JSONObject pointJson) throws JSONException, UnsupportedEncodingException{
-		API_CONNECTOR.postDataToServer(pointJson, POINT_PATH_API);
+		API_CONNECTOR.postDataToServer(pointJson, POINT_API_PATH);
 	}
 	
 	/*	TODO initedRoute should be saved in SQLLITE
 	 * 	Because if user closes the app it should NOT
 	 * 	Create new route, but check if trackingRoute
 	 *  Was created on particular day and send points
-	 *  To it 
+	 *  To it  !!!!!
 	 */	
 	public void initTrackingRoute() throws InterruptedException, ExecutionException{
 		RouteInitializer routeInitializer = new RouteInitializer();
@@ -142,8 +165,8 @@ public class Tracker {
 	public void sendLocation() throws UnsupportedEncodingException, JSONException{
 		LocationListener locationListener = new MyLocationListener();
 		LOCATION_MANAGER.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
-												GlobalState.minDistanceBetweenLocationUpdate, 
-												GlobalState.minDistanceBetweenLocationUpdate, 
+												globalState.getMinDistanceBetweenLocationUpdate(), 
+												globalState.getMinDistanceBetweenLocationUpdate(), 
 												locationListener);
 	}
 	
