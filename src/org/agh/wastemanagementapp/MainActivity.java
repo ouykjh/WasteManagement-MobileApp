@@ -2,6 +2,7 @@ package org.agh.wastemanagementapp;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
@@ -10,6 +11,13 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
+		initUIElements();
+		initButtonsOnClickListeners();
+		/*TODO 	Application should work when server is not responding
+		*		Proper message should be shown instead of
+		*		Just turning of the app
+		*/
+		startTracking();
 	}
 
 	@Override
