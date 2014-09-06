@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
 	Button btnSendToDatabase;
 	Button btnSettings;
 	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,7 +35,6 @@ public class MainActivity extends Activity {
 		*		Proper message should be shown instead of
 		*		Just turning of the app
 		*/
-		startTracking();
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+		
 	//TODO SERVER ADDRESS SHOULD BE KNOWN SOMEHOW
 	private void startTracking() {
 		String serverAddress = "http://192.168.0.101:8000";
