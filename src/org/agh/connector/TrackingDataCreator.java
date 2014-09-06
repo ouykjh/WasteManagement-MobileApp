@@ -9,7 +9,6 @@ public class TrackingDataCreator {
 	
 	//To create MobileUserRoute model in django
 	private static JSONObject route = new JSONObject();
-	private static JSONObject address = new JSONObject();
 	private static JSONObject mobileUser = new JSONObject();
 	private static String longitude;
 	private static String latitude;
@@ -37,12 +36,6 @@ public class TrackingDataCreator {
 		mobileUser.put("id", Integer.toString(myId)); //expect mobileUser to exist in Django server
 	}
 
-	public static void createAddressData(String street, String number, String postCode, String city) throws JSONException{
-		address.put("street", street);
-		address.put("number", number);
-		address.put("postCode", postCode);
-		address.put("city", city);
-	}
 	
 	public static void createPointsData(int routeId, String lon, String lat) throws JSONException{
 		pointRoute.put("id", Integer.toString(routeId));
@@ -51,13 +44,12 @@ public class TrackingDataCreator {
 	}
 
 	public static void accumulateMobileUserRouteData(JSONObject jsonObject) throws JSONException{
-		jsonObject.accumulate("route", route);
+		jsonObject.accumulate("trackingRoute", route);
 		jsonObject.accumulate("date", getCurrentDate());
 		jsonObject.accumulate("mobileUser", mobileUser);
 	}
 
 	public static void accumulatePointData(JSONObject jsonObject) throws JSONException {
-		jsonObject.accumulate("address", address);
 		jsonObject.accumulate("longitude", longitude);
 		jsonObject.accumulate("latitude", latitude);
 		jsonObject.accumulate("route", pointRoute);
