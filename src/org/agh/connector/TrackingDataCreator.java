@@ -31,7 +31,7 @@ public class TrackingDataCreator {
 		String routeName = "Tracking SomeUser";
 		
 		//TODO USER SHOULD SOMEHOW KNOW HIS ID
-		int myId = 2;
+		int myId = 1;
 		
 		route.accumulate("name", routeName);
 		mobileUser.put("id", Integer.toString(myId)); //expect mobileUser to exist in Django server

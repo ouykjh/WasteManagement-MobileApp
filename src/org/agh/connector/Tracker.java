@@ -95,20 +95,36 @@ public class Tracker {
 		return(Integer.parseInt(m.group()));
 	}
 	
-	private Address getAddressFromLocation(Location location){
+	/*TODO 	There should be a better way to
+	 *		get more accurate location 
+	 *		using esri maps
+	 *		instead of Java Android api
+	 */
+	private void setAddressFromLocation(Location location) throws JSONException{
+		
 		Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+		
+		Address result = new Address(null);
 		List<Address> addresses = null;
 		try {
 			addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (addresses != null && addresses.size() > 0) {
-			return addresses.get(0);
+			result = addresses.get(0);
 		}
-		return null;
+		
+		Log.i("TRACKER", "FOUND " + result.getAddressLine(0));
+		String street = ( result.getThoroughfare() == null ) ? null : result.getThoroughfare();
+		String streetNumber = "1";
+		String postalCode = ( result.getThoroughfare() == null ) ? "33-330" : result.getPostalCode();
+		String city = ( result.getThoroughfare() == null ) ? null : result.getLocality();
+		
+		//TrackingDataCreator.createAddressData("kochanowskiego, "16", "33-330", "Krakłw");
+		TrackingDataCreator.createAddressData("Kochanowskiego", "16", "33-330", "Grybow");
 	}
+	
 	
 	private class MyLocationListener implements LocationListener {
 		
@@ -119,11 +135,9 @@ public class Tracker {
 	    		Log.w("TRACKER", "Location of the device is unknown");
 	    	}else{
 		        Log.i("TRACKER", "Sending location: latitude: " + location.getLatitude() + " longitude " + location.getLongitude());
-		        Address address = getAddressFromLocation(location);
 				JSONObject pointJson = new JSONObject();
 				try {
-					Log.i("TRACKER", "CITY " + address.getSubLocality() + "POSTAL " + address.getPostalCode() + "CITY " + address.getLocality());
-					TrackingDataCreator.createAddressData("Kochanowskiego", "16", "33-330", "Grybow");
+			        setAddressFromLocation(location);
 					TrackingDataCreator.createPointsData( routeId, Double.toString(location.getLatitude()), Double.toString(location.getLongitude()) );
 					TrackingDataCreator.accumulatePointData(pointJson);
 					new LocationSender().execute(pointJson);
@@ -145,6 +159,7 @@ public class Tracker {
 
 
 	private void postPoints(JSONObject pointJson) throws JSONException, UnsupportedEncodingException{
+		Log.i("TRACKER", "JSON " + pointJson);
 		API_CONNECTOR.postDataToServer(pointJson, POINT_API_PATH);
 	}
 	
@@ -165,7 +180,7 @@ public class Tracker {
 	public void sendLocation() throws UnsupportedEncodingException, JSONException{
 		LocationListener locationListener = new MyLocationListener();
 		LOCATION_MANAGER.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
-												globalState.getMinDistanceBetweenLocationUpdate(), 
+												globalState.getTimeIntervalLoctionUpdate(), 
 												globalState.getMinDistanceBetweenLocationUpdate(), 
 												locationListener);
 	}

@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +30,10 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main_layout);
 		initUIElements();
 		initButtonsOnClickListeners();
+		/*TODO 	Application should work when server is not responding
+		*		Proper message should be shown instead of
+		*		Just turning of the app
+		*/
 		startTracking();
 	}
 
