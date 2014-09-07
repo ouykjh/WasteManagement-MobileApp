@@ -2,6 +2,7 @@ package org.agh.connector;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,6 +19,8 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+
+//TODO Tutaj nie potrzebny jest url podawany w konstur
 public class ApiConnector {
 	
 	public String url;
@@ -27,8 +30,50 @@ public class ApiConnector {
 		Log.i("GEtRoute", this.url);
 	}
 	
-	public JSONArray GetRoute(){
+	//Returning current data in format: YEAR-MONTH-DAY
+	private static String getCurrentDate(){
+		final Calendar c = Calendar.getInstance();
+	    int mYear = c.get(Calendar.YEAR);
+	    int mMonth = c.get(Calendar.MONTH);
+	    int mDay = c.get(Calendar.DAY_OF_MONTH);
+	    return mYear + "-" + mMonth + "-" + mDay;
+	}
 	
+	public JSONArray getMobileUserRoute(){
+		//TODO get from getCurrentDate !!!
+		url = "http://192.168.0.101:8000/api/mobileUserRoute/?format=json&date=2015-9-9";
+		HttpEntity httpEntity = null;
+		try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			HttpGet httpGet = new HttpGet(url);
+		
+			HttpResponse httpResponse = httpClient.execute(httpGet);
+		
+			httpEntity = httpResponse.getEntity();
+		} catch (ClientProtocolException e){
+			e.printStackTrace();
+		} catch (IOException e1){
+			e1.printStackTrace();
+		}
+		
+		JSONArray jsonArray = null;
+		
+		if(httpEntity != null){
+			try{
+				String entityResponse = EntityUtils.toString(httpEntity);
+				jsonArray = new JSONArray(entityResponse);
+				Log.i("TRACKER", "MobileUserRoute " + jsonArray);
+			}catch(JSONException e){
+				e.printStackTrace();
+			}catch(IOException e1){
+				e1.printStackTrace();
+			}
+		}
+		
+		return jsonArray;
+	}
+	
+	public JSONArray GetRoute(){
 		HttpEntity httpEntity = null;
 		Log.i("GEtRoute", url);
 		try{
@@ -50,9 +95,9 @@ public class ApiConnector {
 			try{
 				String entityResponse = EntityUtils.toString(httpEntity);
 				
-				Log.i("Entity Response : ", entityResponse);
-				
 				jsonArray = new JSONArray(entityResponse);
+				Log.i("Entity Response : ", entityResponse);
+
 			}catch(JSONException e){
 				e.printStackTrace();
 			}catch(IOException e1){
@@ -95,4 +140,3 @@ public class ApiConnector {
 	}
 
 }
-

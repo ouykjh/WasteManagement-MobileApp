@@ -1,16 +1,9 @@
 package org.agh.wastemanagementapp;
 
-import java.io.UnsupportedEncodingException;
-import java.util.concurrent.ExecutionException;
-
-import org.agh.connector.Tracker;
 import org.agh.map.managament.PointManagament;
-import org.json.JSONException;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -29,11 +22,6 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main_layout);
 		initUIElements();
 		initButtonsOnClickListeners();
-		/*TODO 	Application should work when server is not responding
-		*		Proper message should be shown instead of
-		*		Just turning of the app
-		*/
-		startTracking();
 	}
 
 	@Override
@@ -41,27 +29,6 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
-	}
-	
-	//TODO SERVER ADDRESS SHOULD BE KNOWN SOMEHOW
-	private void startTracking() {
-		String serverAddress = "http://192.168.0.101:8000";
-		
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Tracker tracker = new Tracker(serverAddress, locationManager, getApplicationContext());
-		
-		try {
-			tracker.initTrackingRoute();
-			tracker.sendLocation();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void initUIElements(){

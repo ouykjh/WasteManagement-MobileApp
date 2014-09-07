@@ -5,11 +5,17 @@ import java.util.Calendar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class TrackingDataCreator {
 	
 	//To create MobileUserRoute model in django
 	private static JSONObject route = new JSONObject();
 	private static JSONObject mobileUser = new JSONObject();
+	
+	//TODO ONLY FOR TEST PURPOSES REMOVE IT !!!!!
+	private static JSONObject routeFAKE = new JSONObject();
+
 	private static String longitude;
 	private static String latitude;
 
@@ -44,7 +50,10 @@ public class TrackingDataCreator {
 	}
 
 	public static void accumulateMobileUserRouteData(JSONObject jsonObject) throws JSONException{
+		routeFAKE.put("name", "fake");
+		Log.i("TRACKER", "ROUTEFAKE " + routeFAKE);
 		jsonObject.accumulate("trackingRoute", route);
+		jsonObject.accumulate("route", routeFAKE);
 		jsonObject.accumulate("date", getCurrentDate());
 		jsonObject.accumulate("mobileUser", mobileUser);
 	}

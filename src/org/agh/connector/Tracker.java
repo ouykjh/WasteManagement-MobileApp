@@ -82,9 +82,9 @@ public class Tracker {
 		
 		//Post data, get responseJson and return created route_id
 		JSONObject responseJson = new JSONObject();
-		Log.i("TRACKER", mobileUserRouteJson + "A");
+		Log.i("TRACKER", mobileUserRouteJson + "Tracker.java 85");
 		responseJson = API_CONNECTOR.postDataToServer(mobileUserRouteJson, path);
-		Log.i("TRACKER", responseJson +  " A");
+		Log.i("TRACKER", responseJson +  " Tracker.java 87");
 		Pattern p = Pattern.compile("\\d+");
 		Matcher m = p.matcher(responseJson.get("trackingRoute").toString());
 		m.find();
@@ -123,7 +123,6 @@ public class Tracker {
 
 
 	private void postPoints(JSONObject pointJson) throws JSONException, UnsupportedEncodingException{
-		Log.i("TRACKER", "JSON " + pointJson);
 		API_CONNECTOR.postDataToServer(pointJson, POINT_API_PATH);
 	}
 	

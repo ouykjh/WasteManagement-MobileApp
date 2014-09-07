@@ -31,7 +31,9 @@ public class SplashScreenActivity extends Activity {
 		Log.i("HOSTsplash", url);
 		ApiConnector apiConnector = new ApiConnector(url);
 
+		GetRouteTask getRouteTask = new GetRouteTask();
 		new GetRouteTask().execute(apiConnector);
+		getRouteTask.execute(apiConnector);
 	}
 
 	private void initApiConnectorStrings(){
@@ -61,6 +63,19 @@ public class SplashScreenActivity extends Activity {
 			setRoutePoints(jsonArray);
 			startActivity(intent);
 			finish();
+		}
+		
+	}
+	
+	private class GetMobileUserRouteTask extends AsyncTask<ApiConnector, Long, JSONArray>{
+
+		@Override
+		protected JSONArray doInBackground(ApiConnector... params) {
+			return params[0].getMobileUserRoute();
+		}
+		
+		@Override
+		protected void onPostExecute(JSONArray jsonArray){
 		}
 		
 	}
