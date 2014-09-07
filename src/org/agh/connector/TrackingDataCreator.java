@@ -1,47 +1,33 @@
 package org.agh.connector;
 
-import java.util.Calendar;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.util.Log;
 
 public class TrackingDataCreator {
 	
 	//To create MobileUserRoute model in django
+	private static JSONObject trackingRoute = new JSONObject();
 	private static JSONObject route = new JSONObject();
 	private static JSONObject mobileUser = new JSONObject();
-	
-	//TODO ONLY FOR TEST PURPOSES REMOVE IT !!!!!
-	private static JSONObject routeFAKE = new JSONObject();
-
 	private static String longitude;
 	private static String latitude;
+	private static String mobileUserRouteId;
 
 	//To create Point model in django
 	private static JSONObject pointRoute = new JSONObject();
 	
-	//Returning current data in format: YEAR-MONTH-DAY
-	private static String getCurrentDate(){
-		final Calendar c = Calendar.getInstance();
-	    int mYear = c.get(Calendar.YEAR);
-	    int mMonth = c.get(Calendar.MONTH);
-	    int mDay = c.get(Calendar.DAY_OF_MONTH);
-	    return mYear + "-" + mMonth + "-" + mDay;
-	}
-	
-	public static void createMobileUserRouteData() throws JSONException{
+	public static void createMobileUserRouteData(String id) throws JSONException{
 		//TODO Smart route naming
 		String routeName = "Tracking SomeUser";
+		trackingRoute.put("name", routeName);
 		
 		//TODO USER SHOULD SOMEHOW KNOW HIS ID
 		int myId = 1;
+		mobileUserRouteId = id;
+		mobileUser.put("id", myId);
 		
-		route.accumulate("name", routeName);
-		mobileUser.put("id", Integer.toString(myId)); //expect mobileUser to exist in Django server
+		route.put("id", mobileUserRouteId);
 	}
-
 	
 	public static void createPointsData(int routeId, String lon, String lat) throws JSONException{
 		pointRoute.put("id", Integer.toString(routeId));
@@ -50,12 +36,11 @@ public class TrackingDataCreator {
 	}
 
 	public static void accumulateMobileUserRouteData(JSONObject jsonObject) throws JSONException{
-		routeFAKE.put("name", "fake");
-		Log.i("TRACKER", "ROUTEFAKE " + routeFAKE);
-		jsonObject.accumulate("trackingRoute", route);
-		jsonObject.accumulate("route", routeFAKE);
-		jsonObject.accumulate("date", getCurrentDate());
-		jsonObject.accumulate("mobileUser", mobileUser);
+		jsonObject.put("trackingRoute", trackingRoute);
+		jsonObject.put("id", mobileUserRouteId);
+		jsonObject.put("date", "2014-09-07");
+		jsonObject.put("mobileUser", mobileUser);
+		jsonObject.put("route",route);
 	}
 
 	public static void accumulatePointData(JSONObject jsonObject) throws JSONException {

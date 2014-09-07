@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 
+import org.agh.map.managament.GlobalState;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -20,7 +21,6 @@ import org.json.JSONObject;
 import android.util.Log;
 
 
-//TODO Tutaj nie potrzebny jest url podawany w konstur
 public class ApiConnector {
 	
 	public String url;
@@ -34,18 +34,17 @@ public class ApiConnector {
 	private static String getCurrentDate(){
 		final Calendar c = Calendar.getInstance();
 	    int mYear = c.get(Calendar.YEAR);
-	    int mMonth = c.get(Calendar.MONTH);
+	    int mMonth = c.get(Calendar.MONTH) + 1;
 	    int mDay = c.get(Calendar.DAY_OF_MONTH);
 	    return mYear + "-" + mMonth + "-" + mDay;
 	}
 	
 	public JSONArray getMobileUserRoute(){
-		//TODO get from getCurrentDate !!!
-		url = "http://192.168.0.101:8000/api/mobileUserRoute/?format=json&date=2015-9-9";
+		String mobileUserRouteApiUrl = "http://192.168.0.101:8000/api/mobileUserRoute/?format=json&date=" + getCurrentDate();
 		HttpEntity httpEntity = null;
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(url);
+			HttpGet httpGet = new HttpGet(mobileUserRouteApiUrl);
 		
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 		
@@ -62,7 +61,6 @@ public class ApiConnector {
 			try{
 				String entityResponse = EntityUtils.toString(httpEntity);
 				jsonArray = new JSONArray(entityResponse);
-				Log.i("TRACKER", "MobileUserRoute " + jsonArray);
 			}catch(JSONException e){
 				e.printStackTrace();
 			}catch(IOException e1){
@@ -76,9 +74,12 @@ public class ApiConnector {
 	public JSONArray GetRoute(){
 		HttpEntity httpEntity = null;
 		Log.i("GEtRoute", url);
+		String routeId = GlobalState.getInstance().getRouteId();
+		Log.i("GEtRoute", "ROUTE ID = " + routeId);
+		String getRouteUrl = "http://192.168.0.101:8000/api/point/?format=json&routeId=" + routeId;
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(url);
+			HttpGet httpGet = new HttpGet(getRouteUrl);
 		
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 		
@@ -138,5 +139,6 @@ public class ApiConnector {
 		}
 		return null;
 	}
+	
 
 }

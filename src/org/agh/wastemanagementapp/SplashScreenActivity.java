@@ -1,7 +1,12 @@
 package org.agh.wastemanagementapp;
 
+import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.agh.connector.ApiConnector;
 import org.agh.map.managament.AddressPoint;
+import org.agh.map.managament.GlobalState;
 import org.agh.map.managament.PointManagament;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,12 +32,47 @@ public class SplashScreenActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash_screen);
 		initApiConnectorStrings();
-		url ="http://" + host + ":" + port + "/api/point?format=json&route=" + routeID ;
+		url ="http://" + host + ":" + port;
 		Log.i("HOSTsplash", url);
 		ApiConnector apiConnector = new ApiConnector(url);
-
+		try {
+			getRouteData(apiConnector);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void getRouteData(ApiConnector apiConnector) throws InterruptedException, ExecutionException, JSONException{
+		JSONArray result = new JSONArray();
+		GetMobileUserRouteTask getMobileUserRouteTask = new GetMobileUserRouteTask();
+		getMobileUserRouteTask.execute(apiConnector);
+		result = getMobileUserRouteTask.get();
+		Log.i("TRACKER", "HERE " + result);
+		
+		JSONObject json_0;
+		json_0 = result.getJSONObject(0);
+		
+		String route = json_0.getString("route");
+		Pattern p = Pattern.compile("\\d+");
+		Matcher m = p.matcher(route);
+		m.find();
+		
+		String routeId = m.group();
+		
+		String mobileUserRouteId = json_0.getString("resource_uri");
+		Pattern.compile("\\d+");
+		Matcher m2 = p.matcher(mobileUserRouteId);
+		m2.find();
+		mobileUserRouteId = m2.group();
+		
+		GlobalState.getInstance().setRouteId(routeId);
+		GlobalState.getInstance().setMobileUserRouteId(mobileUserRouteId);
+		
 		GetRouteTask getRouteTask = new GetRouteTask();
-		new GetRouteTask().execute(apiConnector);
 		getRouteTask.execute(apiConnector);
 	}
 

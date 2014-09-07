@@ -35,7 +35,7 @@ public class MapActivity extends Activity {
 			String serverAddress = "http://192.168.0.101:8000";
 			
 			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-			Tracker tracker = new Tracker(serverAddress, locationManager, getApplicationContext());
+			Tracker tracker = new Tracker(serverAddress, locationManager);
 			
 			try {
 				tracker.initTrackingRoute();
@@ -62,7 +62,11 @@ public class MapActivity extends Activity {
 			map.zoomToScale(centerPt, 100.00);
 
 			graphicsLayer.removeAll();
-			PointManagament.markPoints(map, graphicsLayer);
+			try {
+				PointManagament.markPoints(map, graphicsLayer);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		protected void onPause() {

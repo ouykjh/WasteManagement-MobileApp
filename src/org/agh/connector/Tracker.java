@@ -9,7 +9,6 @@ import org.agh.map.managament.GlobalState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -22,14 +21,12 @@ public class Tracker {
 	private final ApiConnector API_CONNECTOR;
 	private final LocationManager LOCATION_MANAGER;
 	private final String POINT_API_PATH = "/api/trackingPoint/";
-	private Context context;
 	private int routeId;
 	private GlobalState globalState = GlobalState.getInstance();
 	
-	public Tracker(String url, LocationManager locationManager, Context context){
+	public Tracker(String url, LocationManager locationManager){
 		API_CONNECTOR = new ApiConnector(url);
 		this.LOCATION_MANAGER = locationManager;
-		this.context = context;
 	}
 	
 	private void setRouteId(int routeId){
@@ -41,7 +38,7 @@ public class Tracker {
 		@Override
 		protected Integer doInBackground(Void...params) {
 			try {
-				return postMobileUserRoute();
+				return updateMobileUserRoute();
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			} catch (JSONException e) {
@@ -51,7 +48,7 @@ public class Tracker {
 		}
 		@Override
 		protected void onPostExecute(Integer result){
-			Log.i("TRACKER", "Route created with id = " + result);
+			Log.i("TRACKER", "MobileUserRoute update with trackingId = " + result);
 		}
 	}
 	
@@ -74,17 +71,17 @@ public class Tracker {
 		}
 	}
 	
-	private int postMobileUserRoute() throws JSONException, UnsupportedEncodingException{
-		String path = "/api/mobileUserRoute/";
-		TrackingDataCreator.createMobileUserRouteData();
+	private int updateMobileUserRoute() throws JSONException, UnsupportedEncodingException{
+		String mobileUserRouteid = GlobalState.getInstance().getMobileUserRouteId();
+		String path = "/api/mobileUserRoute/?format=json&id=" + mobileUserRouteid;
+		
+		TrackingDataCreator.createMobileUserRouteData(mobileUserRouteid);
 		JSONObject mobileUserRouteJson = new JSONObject();
 		TrackingDataCreator.accumulateMobileUserRouteData(mobileUserRouteJson);
 		
-		//Post data, get responseJson and return created route_id
+		//Put data, get responseJson and return created route_id
 		JSONObject responseJson = new JSONObject();
-		Log.i("TRACKER", mobileUserRouteJson + "Tracker.java 85");
 		responseJson = API_CONNECTOR.postDataToServer(mobileUserRouteJson, path);
-		Log.i("TRACKER", responseJson +  " Tracker.java 87");
 		Pattern p = Pattern.compile("\\d+");
 		Matcher m = p.matcher(responseJson.get("trackingRoute").toString());
 		m.find();
