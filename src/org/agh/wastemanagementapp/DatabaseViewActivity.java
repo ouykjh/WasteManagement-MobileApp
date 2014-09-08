@@ -3,72 +3,50 @@ package org.agh.wastemanagementapp;
 import java.util.List;
 
 import org.agh.db.DatabaseHelper;
-import org.agh.db.models.Formular;
-import org.agh.db.models.Route;
+import org.agh.db.Formular;
+import org.agh.db.Route;
+import org.agh.db.RoutesAdapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class DatabaseViewActivity extends Activity {
-	private TextView txtView;
-	DatabaseHelper db;
+	private DatabaseHelper db;
+	private ListView lvRoutes;
+	private RoutesAdapter routeAdapter;
+	private List<Route> routes;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.database_view);
-		txtView = (TextView) findViewById(R.id.dbRoutes);
-		String routes = "";
-		String formulars = "";
-		db = new DatabaseHelper(getApplicationContext());
+		lvRoutes = (ListView) findViewById(R.id.listViewRoutes);
+		initListView();
 		
 		Route route1 = new Route(1, "kuba");
-		Route route2 = new Route(1, "piotrek");
+		//Route route2 = new Route(1, "piotrek");
 
 		long route1Id = db.createRoute(route1);
-		long route2Id = db.createRoute(route2);
+		//long route2Id = db.createRoute(route2);
 
 		
 		Formular formular1 = new Formular(route1Id, 50.234, 19.3435);
-		Formular formular2 = new Formular(route2Id, 10.234, 49.3435);
+		//Formular formular2 = new Formular(route2Id, 10.234, 49.3435);
 
 		long formular1Id = db.createFormular(formular1);
 		long formular6Id = db.createFormular(formular1);
 		long formular7Id = db.createFormular(formular1);
-		long formular2Id = db.createFormular(formular2);
-		long formular3Id = db.createFormular(formular2);
-		long formular4Id = db.createFormular(formular2);
-		long formular5Id = db.createFormular(formular2);
-
-		//Testing adding routes to db 
-		List<Route> routeList = db.getAllRoutes();
-		for (Route r : routeList){
-			routes = routes + r.getName() + "\n";
-		}
-		
-		//Testing deleting routes
-		db.deleteRoute(route1Id);
-		
-		//Testing adding formulars to db 
-		List<Formular> formularList = db.getAllFormulars();
-		for (Formular r : formularList){
-			formulars = formulars + " " + r.getId() + r.getLatitude() + " " + r.getLongitude() + "\n";
-		}
-		
-//		//Testing deleting formulars
-//		db.deleteFormular(formular3Id);
-
-//		//Testing fetching formulars by routeId
-//		List<Formular> formularList = db.getFormularsByRouteId(route2Id);
-//		for (Formular r : formularList){
-//			formulars = formulars + r.getId() + " " + r.getLatitude() + " " + r.getLongitude() + "\n";
-//		}
-		
-		txtView.setText(formulars);
-		db.close();
+//		long formular2Id = db.createFormular(formular2);
+//		long formular3Id = db.createFormular(formular2);
+//		long formular4Id = db.createFormular(formular2);
+//		long formular5Id = db.createFormular(formular2);
 	}
 
 	@Override
@@ -78,4 +56,42 @@ public class DatabaseViewActivity extends Activity {
 		return true;
 	}
 
+	private void initListView(){
+		fillListViewData();
+	    initListViewOnItemClick();
+	}
+
+	private void fillListViewData() {
+		db = new DatabaseHelper(getApplicationContext());
+		getAllRoutes();
+		routeAdapter = new RoutesAdapter(this, routes);
+		lvRoutes.setAdapter(routeAdapter);
+	}
+
+	private void initListViewOnItemClick() {
+		lvRoutes.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View v, int position,
+					long id) {
+				Route route = routes.get(position);
+				Intent intent = new Intent(getApplicationContext(), DBFormularsActivity.class);
+				Log.i("ROUTE_ID_acti", String.valueOf(route.getId()));
+				intent.putExtra("ROUTE_ID", route.getId());
+				startActivity(intent);
+			}
+			
+		});
+	}
+	
+	private void getAllRoutes() {
+		routes = db.getAllRoutes();
+	}
+
+	@Override
+	protected void onDestroy(){
+		if(db != null)
+			db.close();
+		super.onDestroy();
+	}
 }

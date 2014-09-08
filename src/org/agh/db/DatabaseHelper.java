@@ -3,9 +3,7 @@ package org.agh.db;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.agh.db.models.Formular;
-import org.agh.db.models.Route;
-import org.codehaus.jackson.map.deser.std.StdDeserializer.SqlDateDeserializer;
+//import org.codehaus.jackson.map.deser.std.StdDeserializer.SqlDateDeserializer;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -143,12 +141,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		Log.i(DATABASE_TAG, query);
 		Cursor cursor = db.rawQuery(query, null);
 		if(cursor.moveToFirst()){
-			Log.i(DATABASE_TAG, "yolo");
 			do{
 				Formular formular = new Formular();
 				formular.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
 				formular.setLatitude(cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
-				Log.i(DATABASE_TAG, String.valueOf(formular.getLatitude()));
 				formular.setLongitude(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)));
 				formular.setRouteId(routeId);
 				formulars.add(formular);
