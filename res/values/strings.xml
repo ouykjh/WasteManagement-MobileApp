@@ -12,7 +12,6 @@
     <string name="title_activity_database_view">DatabaseViewActivity</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="retrieving_data">Pobieranie danych...</string>
-    
     <string name="menu_settings">Ustawienia</string>
     <string name="pref_send_formular">Wysyłanie formularzy</string>
     <string name="pref_send_formular_summary">Wysyłanie formularzy natychmiast po wypełnieniu</string>
@@ -26,9 +25,8 @@
     <string name="pref_port_summary">Ustaw port</string>
     <string name="pref_route_summary">Ustaw id trasy</string>
     <string name="pref_route">Trasa</string>
-    
-     
     <string name="pref_connection">Parametry połączenia</string>
     <string name="pref_sync_setting">Ustawienia synchronizacji</string>
+    <string name="title_activity_dbformulars">DBFormulars</string>
 
 </resources>

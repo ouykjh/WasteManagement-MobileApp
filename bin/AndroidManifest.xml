@@ -47,6 +47,10 @@
             android:name="org.agh.wastemanagementapp.SplashScreenActivity"
             android:label="@string/title_activity_splash_screen" >
         </activity>
+        <activity
+            android:name="org.agh.wastemanagementapp.DBFormularsActivity"
+            android:label="@string/title_activity_dbformulars" >
+        </activity>
     </application>
 
 </manifest>
