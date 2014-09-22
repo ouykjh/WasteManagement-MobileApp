@@ -14,6 +14,9 @@ public class GlobalState  {
 		return instance;
 	}
 	
+	private String mobileUserRouteId;
+	private String routeId;
+	
 	private int notVisitedColor = Color.WHITE;
 	private int visitedColor = Color.BLUE;
 	private int nextColor = Color.RED;
@@ -99,5 +102,21 @@ public class GlobalState  {
 	public void setMinDistanceBetweenLocationUpdate(
 			long minDistanceBetweenLocationUpdate) {
 		this.minDistanceBetweenLocationUpdate = minDistanceBetweenLocationUpdate;
+	}
+
+	public String getRouteId() {
+		return routeId;
+	}
+
+	public void setRouteId(String routeId) {
+		this.routeId = routeId;
+	}
+
+	public String getMobileUserRouteId() {
+		return mobileUserRouteId;
+	}
+
+	public void setMobileUserRouteId(String mobileUserRouteId) {
+		this.mobileUserRouteId = mobileUserRouteId;
 	}
 }

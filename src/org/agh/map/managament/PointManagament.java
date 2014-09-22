@@ -43,13 +43,15 @@ public class PointManagament {
 	    return new Point(mercatorX_lon, mercatorY_lat);
 	}
 	
-	public static void markPoints(MapView map, GraphicsLayer graphicsLayer){
+	public static void markPoints(MapView map, GraphicsLayer graphicsLayer) throws Exception{
 		//dummyData();
 		
 		SimpleLineSymbol lineSymbol = new SimpleLineSymbol(globalState.getLineColor() , 3, SimpleLineSymbol.STYLE.DASH);
 		Polyline lineGeometry = new Polyline();
 		
 		Point point = new Point();
+		if(pointsList.isEmpty()) throw new Exception("No points provided PointManagement.java line 53");
+		
 		point = toWebMercator( pointsList.get(0).getPoint() );
 		
 		lineGeometry.startPath(point.getX(), point.getY());
@@ -76,7 +78,6 @@ public class PointManagament {
 		}
 		Graphic lineGraphic = new Graphic( lineGeometry, lineSymbol );
 		graphicsLayer.addGraphic( lineGraphic );
-		Log.d("SUPER", "ONCE");
 	}
 }
 
