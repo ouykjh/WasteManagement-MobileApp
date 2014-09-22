@@ -10,7 +10,11 @@ import org.json.JSONException;
 import android.app.Activity;
 import android.content.Context;
 import android.location.LocationManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
@@ -30,7 +34,7 @@ public class MapActivity extends Activity {
 			*/
 			startTracking();
 		}
-		
+
 		private void startTracking() {
 			String serverAddress = "http://192.168.0.101:8000";
 			
@@ -48,6 +52,24 @@ public class MapActivity extends Activity {
 				e.printStackTrace();
 			} catch (JSONException e) {
 				e.printStackTrace();
+			}
+		}
+		public boolean onCreateOptionsMenu(Menu menu)
+	    {
+	        MenuInflater menuInflater = getMenuInflater();
+	        menuInflater.inflate(R.layout.menu, menu);
+	        return true;
+	    }
+		
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item){
+			switch(item.getItemId()){
+			case R.id.menu_formular:
+				Intent intent = new Intent(getApplicationContext(), FormularActivity.class);
+				startActivity(intent);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 			}
 		}
 		private void initMap(){

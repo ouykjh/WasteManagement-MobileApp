@@ -12,5 +12,6 @@
         android:layout_marginLeft="20dp"
         android:text="test"
         android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
+
 </LinearLayout>
 

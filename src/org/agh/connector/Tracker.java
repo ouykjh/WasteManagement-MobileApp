@@ -9,6 +9,7 @@ import org.agh.map.managament.GlobalState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;

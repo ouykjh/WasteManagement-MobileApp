@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class RoutesAdapter extends ArrayAdapter<Route> {
@@ -41,7 +42,7 @@ public class RoutesAdapter extends ArrayAdapter<Route> {
     	}
     	
     	viewHolder.tvRoute.setText(routes.get(position).getName());
-    	
+
     	return rowView;
     }
 }
