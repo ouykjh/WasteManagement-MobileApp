@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
 		*		Proper message should be shown instead of
 		*		Just turning of the app
 		*/
+		//startTracking();
 	}
 
 	@Override

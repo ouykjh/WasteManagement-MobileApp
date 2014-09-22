@@ -11,6 +11,12 @@
         android:id="@+id/tvFormularId"
         android:layout_marginLeft="20dp"
         android:text="test"
-        android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignParentLeft="true"></TextView>
+
+    <CheckBox
+        android:id="@+id/cbFormularId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
 

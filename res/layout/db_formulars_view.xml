@@ -8,5 +8,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </ListView>
-
+	<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llControlButtons">
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnSelectAll"
+            android:text="@string/selectAll"
+            android:layout_width="fill_parent"></Button>
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btnSend"
+            android:text="@string/send"
+            android:layout_width="fill_parent"></Button>
+    	</LinearLayout>
 </LinearLayout>

@@ -51,6 +51,10 @@
             android:name="org.agh.wastemanagementapp.DBFormularsActivity"
             android:label="@string/title_activity_dbformulars" >
         </activity>
+        <activity
+            android:name="org.agh.wastemanagementapp.FormularActivity"
+            android:label="@string/title_activity_formular" >
+        </activity>
     </application>
 
 </manifest>

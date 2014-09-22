@@ -3,7 +3,11 @@ package org.agh.wastemanagementapp;
 import org.agh.map.managament.PointManagament;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
@@ -19,6 +23,24 @@ public class MapActivity extends Activity {
 			initMap();	
 		}
 		
+		public boolean onCreateOptionsMenu(Menu menu)
+	    {
+	        MenuInflater menuInflater = getMenuInflater();
+	        menuInflater.inflate(R.layout.menu, menu);
+	        return true;
+	    }
+		
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item){
+			switch(item.getItemId()){
+			case R.id.menu_formular:
+				Intent intent = new Intent(getApplicationContext(), FormularActivity.class);
+				startActivity(intent);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}
 		private void initMap(){
 			graphicsLayer = new GraphicsLayer();
 			map = (MapView)findViewById(R.id.map);
