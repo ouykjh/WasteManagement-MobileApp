@@ -24,6 +24,7 @@ public class GlobalState  {
 	private int textColor = Color.MAGENTA;
 	private STYLE style = (STYLE) SimpleMarkerSymbol.STYLE.DIAMOND;
 	private int textSize = 10;
+	private String serverAddress = "http://192.168.43.185:8000";
 	
 	//minTime minimum time interval between location updates, in milliseconds
 	private long timeIntervalLoctionUpdate = 5000; 
@@ -118,5 +119,13 @@ public class GlobalState  {
 
 	public void setMobileUserRouteId(String mobileUserRouteId) {
 		this.mobileUserRouteId = mobileUserRouteId;
+	}
+
+	public String getServerAddress() {
+		return serverAddress;
+	}
+	
+	public void setServerAddres(String serverAddres){
+		this.serverAddress = serverAddres;  
 	}
 }

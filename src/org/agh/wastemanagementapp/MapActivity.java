@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutionException;
 
 import org.agh.connector.Tracker;
+import org.agh.map.managament.GlobalState;
 import org.agh.map.managament.PointManagament;
 import org.json.JSONException;
 
@@ -11,10 +12,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.esri.android.map.GraphicsLayer;
+import com.esri.android.map.MapOptions;
+import com.esri.android.map.MapOptions.MapType;
 import com.esri.android.map.MapView;
-import com.esri.android.map.ags.ArcGISTiledMapServiceLayer;
 
 public class MapActivity extends Activity {
 		MapView map = null;
@@ -32,7 +35,7 @@ public class MapActivity extends Activity {
 		}
 		
 		private void startTracking() {
-			String serverAddress = "http://192.168.0.101:8000";
+			String serverAddress = GlobalState.getInstance().getServerAddress();
 			
 			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			Tracker tracker = new Tracker(serverAddress, locationManager);
@@ -50,20 +53,19 @@ public class MapActivity extends Activity {
 				e.printStackTrace();
 			}
 		}
+
 		private void initMap(){
 			graphicsLayer = new GraphicsLayer();
 			map = (MapView)findViewById(R.id.map);
+			MapOptions mapOptions = new MapOptions(MapType.TOPO);
+			map.setMapOptions(mapOptions);
 			
-			map.addLayer(new ArcGISTiledMapServiceLayer("" +
-			"http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"));
 			map.addLayer(graphicsLayer);
 			map.enableWrapAround(true);
-			com.esri.core.geometry.Point centerPt = new com.esri.core.geometry.Point(29.959, 50.060);
-			map.zoomToScale(centerPt, 100.00);
-
 			graphicsLayer.removeAll();
 			try {
 				PointManagament.markPoints(map, graphicsLayer);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -78,4 +80,4 @@ public class MapActivity extends Activity {
 			super.onResume();
 			map.unpause();
 		}
-	}
+	}	

@@ -40,7 +40,8 @@ public class ApiConnector {
 	}
 	
 	public JSONArray getMobileUserRoute(){
-		String mobileUserRouteApiUrl = "http://192.168.0.101:8000/api/mobileUserRoute/?format=json&date=" + getCurrentDate();
+		String serverAddress = GlobalState.getInstance().getServerAddress();
+		String mobileUserRouteApiUrl = serverAddress + "/api/mobileUserRoute/?format=json&date=" + getCurrentDate();
 		HttpEntity httpEntity = null;
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -72,11 +73,12 @@ public class ApiConnector {
 	}
 	
 	public JSONArray GetRoute(){
+		String ServerAddress = GlobalState.getInstance().getServerAddress();
 		HttpEntity httpEntity = null;
 		Log.i("GEtRoute", url);
 		String routeId = GlobalState.getInstance().getRouteId();
 		Log.i("GEtRoute", "ROUTE ID = " + routeId);
-		String getRouteUrl = "http://192.168.0.101:8000/api/point/?format=json&routeId=" + routeId;
+		String getRouteUrl = ServerAddress + "/api/point/?format=json&routeId=" + routeId;
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpGet = new HttpGet(getRouteUrl);
