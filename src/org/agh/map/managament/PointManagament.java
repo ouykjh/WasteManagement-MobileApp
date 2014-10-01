@@ -3,8 +3,6 @@ package org.agh.map.managament;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
 import com.esri.core.geometry.Point;
@@ -76,12 +74,7 @@ public class PointManagament {
 			graphicsLayer.addGraphic( resultLocation );
 			flag = true;
 		}
-		Graphic lineGraphic = new Graphic( lineGeometry, lineSymbol );
-		graphicsLayer.addGraphic( lineGraphic );
+		map.zoomTo(point, 10);
 	}
+	
 }
-
-
-
-
-

@@ -80,6 +80,8 @@ public class SplashScreenActivity extends Activity {
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		this.host = sharedPrefs.getString("prefHost", "NULL");
 		this.port = sharedPrefs.getString("prefPort", "NULL");
+		GlobalState.getInstance().setServerAddres("http://" + host + ":" + port);
+		Log.i("TRACKER", "ADDRESS " + GlobalState.getInstance().getServerAddress());
 		this.routeID = sharedPrefs.getString("prefRoute", "1");
 	}
 	
