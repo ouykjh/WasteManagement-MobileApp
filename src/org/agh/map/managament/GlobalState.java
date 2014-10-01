@@ -1,9 +1,12 @@
 package org.agh.map.managament;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
+
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
-
-import android.graphics.Color;
 
 public class GlobalState  {
 	

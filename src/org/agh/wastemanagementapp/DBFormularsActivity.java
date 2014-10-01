@@ -5,22 +5,24 @@ import java.util.List;
 import org.agh.db.DatabaseHelper;
 import org.agh.db.Formular;
 import org.agh.db.FormularsAdapter;
-import org.agh.db.Route;
-import org.agh.db.RoutesAdapter;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class DBFormularsActivity extends Activity {
-	private DatabaseHelper db;
+	private Button btnSelectAll;
+	private Button btnSend;
 	private ListView lvFormulars;
+
+	private DatabaseHelper db;
 	private FormularsAdapter formularAdapter;
 	private List<Formular> formulars;
 
@@ -28,8 +30,9 @@ public class DBFormularsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.db_formulars_view);
-		lvFormulars = (ListView) findViewById(R.id.listViewFormulars);
+		initUIElements();
 		initListView();
+		initButtonsOnClickListeners();
 	}
 
 	@Override
@@ -38,11 +41,47 @@ public class DBFormularsActivity extends Activity {
 		getMenuInflater().inflate(R.menu.dbformulars, menu);
 		return true;
 	}
+	private void initUIElements(){
+		lvFormulars = (ListView) findViewById(R.id.listViewFormulars);
+		btnSelectAll = (Button) findViewById(R.id.btnSelectAll);
+		btnSend = (Button) findViewById(R.id.btnSend);
+	}
+	
+	private void initButtonsOnClickListeners(){
+		OnClickListener onClickListener = new OnClickListener(){
+			public void onClick(View v){
+				switch (v.getId()){
+				case R.id.btnSelectAll:
+					selectAllCheckboxes(v);
+					break;
+				case R.id.btnSend:
+					sendFormulars(); 
+					break;
+				
+				default:
+					break;
+				}
+			}
+		};
+		btnSelectAll.setOnClickListener(onClickListener);
+		btnSend.setOnClickListener(onClickListener);
+	}
+	
+	private void selectAllCheckboxes(View v){
+        int size = lvFormulars.getCount();
+		boolean check = lvFormulars.isItemChecked(0);
+	    for(int i = 0; i < size; i++)
+	        lvFormulars.setItemChecked(i, !check);
+	}
+	
+	private void sendFormulars(){
+		
+	}
 	
 	private void initListView(){
 		fillListViewData();
 	}
-
+	
 	private void fillListViewData() {
 		db = new DatabaseHelper(getApplicationContext());
 		getFormulars();

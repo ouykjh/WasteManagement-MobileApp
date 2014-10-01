@@ -81,3 +81,4 @@ public class MapActivity extends Activity {
 			map.unpause();
 		}
 	}	
+
