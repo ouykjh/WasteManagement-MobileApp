@@ -78,6 +78,7 @@ public class Tracker {
 		TrackingDataCreator.createMobileUserRouteData(mobileUserRouteid);
 		JSONObject mobileUserRouteJson = new JSONObject();
 		TrackingDataCreator.accumulateMobileUserRouteData(mobileUserRouteJson);
+		Log.i("TRACKER", "update json " + mobileUserRouteJson);
 		
 		//Put data, get responseJson and return created route_id
 		JSONObject responseJson = new JSONObject();
@@ -101,6 +102,7 @@ public class Tracker {
 				try {
 					TrackingDataCreator.createPointsData( routeId, Double.toString(location.getLatitude()), Double.toString(location.getLongitude()) );
 					TrackingDataCreator.accumulatePointData(pointJson);
+					Log.i("TRACKER", "TEN JSON " + pointJson );
 					new LocationSender().execute(pointJson);
 				} catch (JSONException e) {
 					e.printStackTrace();

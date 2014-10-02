@@ -42,7 +42,9 @@ public class MapActivity extends Activity {
 			
 			try {
 				tracker.initTrackingRoute();
+				Log.i("TRACKER", "Tracking started");
 				tracker.sendLocation();
+				Log.i("TRACKER", "Sending location");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ExecutionException e) {
