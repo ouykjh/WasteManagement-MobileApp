@@ -11,6 +11,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -130,6 +131,40 @@ public class ApiConnector {
 			//TODO should always return some kind of response... 
 			if( responseString.length() != 0 ){
 				JSONObject obj = new JSONObject(responseString);
+				return obj;
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public JSONObject putDataToServer(JSONObject jsonObject, String path) throws JSONException, UnsupportedEncodingException{
+		String fullUrl = url + path;
+		HttpClient client = new DefaultHttpClient();
+		HttpPut post = new HttpPut(fullUrl);
+		String json = "";
+		
+		json = jsonObject.toString();
+		StringEntity se = new StringEntity(json);
+
+		try {
+			post.setHeader("Accept", "application/json");
+			post.setHeader("Content-type", "application/json");
+			post.setEntity(se);
+			HttpResponse response = client.execute(post);
+			Log.i("TRACKER", "response " + response);
+			String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
+			
+			//TODO should always return some kind of response... 
+			if( responseString.length() != 0 ){
+				JSONObject obj = new JSONObject(responseString);
+				Log.i("TRACKER", "response " + obj);
+
 				return obj;
 			}
 		} catch (UnsupportedEncodingException e) {

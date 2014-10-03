@@ -1,9 +1,6 @@
 package org.agh.map.managament;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationManager;
 
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
@@ -28,6 +25,7 @@ public class GlobalState  {
 	private STYLE style = (STYLE) SimpleMarkerSymbol.STYLE.DIAMOND;
 	private int textSize = 10;
 	private String serverAddress = "http://192.168.43.185:8000";
+	private int myId = 3;
 	
 	//minTime minimum time interval between location updates, in milliseconds
 	private long timeIntervalLoctionUpdate = 5000; 
@@ -130,5 +128,13 @@ public class GlobalState  {
 	
 	public void setServerAddres(String serverAddres){
 		this.serverAddress = serverAddres;  
+	}
+
+	public int getMyId() {
+		return myId;
+	}
+
+	public void setMyId(int myId) {
+		this.myId = myId;
 	}
 }

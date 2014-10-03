@@ -1,5 +1,6 @@
 package org.agh.connector;
 
+import org.agh.map.managament.GlobalState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,11 +23,11 @@ public class TrackingDataCreator {
 		trackingRoute.put("name", routeName);
 		
 		//TODO USER SHOULD SOMEHOW KNOW HIS ID
-		int myId = 1;
+		int myId = GlobalState.getInstance().getMyId();
 		mobileUserRouteId = id;
 		mobileUser.put("id", myId);
 		
-		route.put("id", mobileUserRouteId);
+		route.put("id", GlobalState.getInstance().getRouteId());
 	}
 	
 	public static void createPointsData(int routeId, String lon, String lat) throws JSONException{
@@ -38,14 +39,14 @@ public class TrackingDataCreator {
 	public static void accumulateMobileUserRouteData(JSONObject jsonObject) throws JSONException{
 		jsonObject.put("trackingRoute", trackingRoute);
 		jsonObject.put("id", mobileUserRouteId);
-		jsonObject.put("date", "2014-09-07");
-		jsonObject.put("mobileUser", mobileUser);
-		jsonObject.put("route",route);
+		//jsonObject.put("date", "2014-10-02");
+		//jsonObject.put("mobileUser", mobileUser);
+		//jsonObject.put("route",route);
 	}
 
 	public static void accumulatePointData(JSONObject jsonObject) throws JSONException {
 		jsonObject.accumulate("longitude", longitude);
 		jsonObject.accumulate("latitude", latitude);
-		jsonObject.accumulate("route", pointRoute);
+		jsonObject.accumulate("trackingRoute", pointRoute);
 	}
 }

@@ -51,7 +51,7 @@ public class SplashScreenActivity extends Activity {
 		GetMobileUserRouteTask getMobileUserRouteTask = new GetMobileUserRouteTask();
 		getMobileUserRouteTask.execute(apiConnector);
 		result = getMobileUserRouteTask.get();
-		Log.i("TRACKER", "HERE " + result);
+		Log.i("TRACKER", "result Here " + result);
 		
 		JSONObject json_0;
 		json_0 = result.getJSONObject(0);
