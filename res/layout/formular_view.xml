@@ -9,7 +9,7 @@
     tools:context=".FormularActivity" >
 
     <EditText
-        android:id="@+id/etLatitude"
+        android:id="@+id/etAmountOfBins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -18,35 +18,25 @@
         android:ems="10" />
 
     <EditText
-        android:id="@+id/etLongitude"
+        android:id="@+id/etPercentageFilling"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etLatitude"
+        android:layout_below="@+id/etAmountOfBins"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:ems="10" >
 
         <requestFocus />
     </EditText>
-
+    
     <TextView
-        android:id="@+id/tvLongitude"
+        android:id="@+id/tvAmountOfBins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/etLatitude"
-        android:layout_alignLeft="@+id/etLatitude"
+        android:layout_alignBottom="@+id/etAmountOfBins"
+        android:layout_alignLeft="@+id/etAmountOfBins"
         android:layout_marginBottom="58dp"
-        android:text="@string/latitude"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/etLongitude"
-        android:layout_below="@+id/etLatitude"
-        android:layout_marginTop="18dp"
-        android:text="@string/longitude"
+        android:text="@string/amountOfBins"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -60,15 +50,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
-        android:id="@+id/btnSaveToDatabase"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/etLongitude"
-        android:layout_below="@+id/etLongitude"
-        android:layout_marginTop="40dp"
-        android:text="@string/saveToDb" />
-
-    <Button
         android:id="@+id/btnSendFormular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,5 +57,33 @@
         android:layout_alignBottom="@+id/btnSaveToDatabase"
         android:layout_toRightOf="@+id/btnSaveToDatabase"
         android:text="@string/send" />
+
+    <TextView
+        android:id="@+id/tvPercentageBinFilling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etPercentageFilling"
+        android:layout_below="@+id/etAmountOfBins"
+        android:layout_marginTop="18dp"
+        android:text="@string/percentageFilling"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/btnSaveToDatabase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etPercentageFilling"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="21dp"
+        android:text="@string/saveToDb" />
+
+    <Spinner
+        android:id="@+id/spAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnSendFormular"
+        android:layout_alignLeft="@+id/btnSaveToDatabase"
+        android:layout_alignRight="@+id/etPercentageFilling"
+        android:layout_marginBottom="18dp" />
 
 </RelativeLayout>

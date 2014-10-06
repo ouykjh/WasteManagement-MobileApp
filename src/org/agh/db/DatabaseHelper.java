@@ -31,15 +31,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	
 	//TABLE_FORMULAR - column names
 	private static final String KEY_ROUTE_ID = "route_id";
-	private static final String KEY_LONGITUDE = "longitude";
-	private static final String KEY_LATITUDE = "latitude";
+	private static final String KEY_POINT_ID = "point_id";
+	private static final String KEY_MOBILE_USER_ID = "mobile_user_id";
+	private static final String KEY_BINS_AMOUNT = "bins_amount";
+	private static final String KEY_PERCENTAGE_FILL = "percentage_fill";
 	
 	//Creating tables
 	private static final String CREATE_TABLE_ROUTES = "CREATE TABLE " + TABLE_ROUTE + "( " + KEY_ID + " INTEGER PRIMARY KEY, " 
 			+ KEY_EXTERNAL_ROUTE_ID + " INTEGER, " + KEY_ROUTE_NAME + " TEXT)";
 	
 	private static final String CREATE_TABLE_FORMULARS = "CREATE TABLE " + TABLE_FORMULAR + "( " + KEY_ID + " INTEGER PRIMARY KEY, " 
-			+  KEY_LONGITUDE + " DOUBLE, " + KEY_LATITUDE + " DOUBLE, " + KEY_ROUTE_ID + " INTEGER, " + 
+			+ KEY_POINT_ID + " INTEGER, " + KEY_MOBILE_USER_ID + " INTEGER, " + KEY_BINS_AMOUNT + " DOUBLE, " + KEY_PERCENTAGE_FILL + " DOUBLE, " + KEY_ROUTE_ID + " INTEGER, " + 
 			"FOREIGN KEY (" + KEY_ROUTE_ID + ") REFERENCES " + TABLE_ROUTE + " (" + KEY_ID + "))";
 	
 	
@@ -84,9 +86,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	public long createFormular(Formular formular){
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(KEY_LONGITUDE, formular.getLongitude());
-		values.put(KEY_LATITUDE, formular.getLatitude());
+		values.put(KEY_BINS_AMOUNT, formular.getAmountOfBins());
+		values.put(KEY_PERCENTAGE_FILL, formular.getPercentageFilling());
 		values.put(KEY_ROUTE_ID, formular.getRouteId());
+		values.put(KEY_POINT_ID, formular.getPointId());
+		values.put(KEY_MOBILE_USER_ID, formular.getMobileUserId());
 
 		long formularID = db.insert(TABLE_FORMULAR, null, values);
 		
@@ -124,8 +128,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 			do{
 				Formular formular = new Formular();
 				formular.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
-				formular.setLatitude(cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
-				formular.setLongitude(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)));
+				formular.setPointId(cursor.getInt(cursor.getColumnIndex(KEY_POINT_ID)));
+				formular.setMobileUserId(cursor.getInt(cursor.getColumnIndex(KEY_MOBILE_USER_ID)));
+				formular.setAmountOfBins(cursor.getInt(cursor.getColumnIndex(KEY_PERCENTAGE_FILL)));
+				formular.setPercentageFilling(cursor.getInt(cursor.getColumnIndex(KEY_BINS_AMOUNT)));
 				formulars.add(formular);
 			}while(cursor.moveToNext());
 		}
@@ -144,8 +150,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 			do{
 				Formular formular = new Formular();
 				formular.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
-				formular.setLatitude(cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
-				formular.setLongitude(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)));
+				formular.setPointId(cursor.getInt(cursor.getColumnIndex(KEY_POINT_ID)));
+				formular.setMobileUserId(cursor.getInt(cursor.getColumnIndex(KEY_MOBILE_USER_ID)));
+				formular.setAmountOfBins(cursor.getInt(cursor.getColumnIndex(KEY_PERCENTAGE_FILL)));
+				formular.setPercentageFilling(cursor.getInt(cursor.getColumnIndex(KEY_BINS_AMOUNT)));
 				formular.setRouteId(routeId);
 				formulars.add(formular);
 			}while(cursor.moveToNext());

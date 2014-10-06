@@ -30,23 +30,6 @@ public class DatabaseViewActivity extends Activity {
 		initUIElements();
 		initListView();
 		
-		Route route1 = new Route(1, "kuba");
-		Route route2 = new Route(1, "piotrek");
-
-		long route1Id = db.createRoute(route1);
-		long route2Id = db.createRoute(route2);
-
-		
-		Formular formular1 = new Formular(route1Id, 50.234, 19.3435);
-		Formular formular2 = new Formular(route2Id, 10.234, 49.3435);
-
-		long formular1Id = db.createFormular(formular1);
-		long formular6Id = db.createFormular(formular1);
-		long formular7Id = db.createFormular(formular1);
-		long formular2Id = db.createFormular(formular2);
-		long formular3Id = db.createFormular(formular2);
-		long formular4Id = db.createFormular(formular2);
-		long formular5Id = db.createFormular(formular2);
 	}
 
 	@Override
