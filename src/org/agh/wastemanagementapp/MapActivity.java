@@ -18,8 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.esri.android.map.GraphicsLayer;
-import com.esri.android.map.MapOptions;
-import com.esri.android.map.MapOptions.MapType;
 import com.esri.android.map.MapView;
 
 public class MapActivity extends Activity {
@@ -63,7 +61,9 @@ public class MapActivity extends Activity {
 			
 			try {
 				tracker.initTrackingRoute();
+				Log.i("TRACKER", "Tracking started");
 				tracker.sendLocation();
+				Log.i("TRACKER", "Sending location");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ExecutionException e) {
@@ -78,8 +78,6 @@ public class MapActivity extends Activity {
 		private void initMap(){
 			graphicsLayer = new GraphicsLayer();
 			map = (MapView)findViewById(R.id.map);
-			MapOptions mapOptions = new MapOptions(MapType.TOPO);
-			map.setMapOptions(mapOptions);
 			
 			map.addLayer(graphicsLayer);
 			map.enableWrapAround(true);

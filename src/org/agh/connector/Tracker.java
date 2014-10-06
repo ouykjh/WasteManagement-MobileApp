@@ -9,7 +9,6 @@ import org.agh.map.managament.GlobalState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -74,15 +73,16 @@ public class Tracker {
 	
 	private int updateMobileUserRoute() throws JSONException, UnsupportedEncodingException{
 		String mobileUserRouteid = GlobalState.getInstance().getMobileUserRouteId();
-		String path = "/api/mobileUserRoute/?format=json&id=" + mobileUserRouteid;
+		String path = "/api/mobileUserRoute/" + mobileUserRouteid + "/";
 		
 		TrackingDataCreator.createMobileUserRouteData(mobileUserRouteid);
 		JSONObject mobileUserRouteJson = new JSONObject();
 		TrackingDataCreator.accumulateMobileUserRouteData(mobileUserRouteJson);
+		Log.i("TRACKER", "update json " + mobileUserRouteJson);
 		
 		//Put data, get responseJson and return created route_id
 		JSONObject responseJson = new JSONObject();
-		responseJson = API_CONNECTOR.postDataToServer(mobileUserRouteJson, path);
+		responseJson = API_CONNECTOR.putDataToServer(mobileUserRouteJson, path);
 		Pattern p = Pattern.compile("\\d+");
 		Matcher m = p.matcher(responseJson.get("trackingRoute").toString());
 		m.find();
@@ -102,6 +102,7 @@ public class Tracker {
 				try {
 					TrackingDataCreator.createPointsData( routeId, Double.toString(location.getLatitude()), Double.toString(location.getLongitude()) );
 					TrackingDataCreator.accumulatePointData(pointJson);
+					Log.i("TRACKER", "TEN JSON " + pointJson );
 					new LocationSender().execute(pointJson);
 				} catch (JSONException e) {
 					e.printStackTrace();

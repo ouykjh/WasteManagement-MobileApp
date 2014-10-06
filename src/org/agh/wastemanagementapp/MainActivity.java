@@ -90,10 +90,10 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(getApplicationContext(), DatabaseViewActivity.class);
 		startActivity(intent);
 	}
+
 	
 	private void openFormular(){
 		Intent intent = new Intent(getApplicationContext(), FormularActivity.class);
 		startActivity(intent);
 	}
 }
-

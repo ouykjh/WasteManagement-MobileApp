@@ -2,9 +2,7 @@ package org.agh.map.managament;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.widget.Toast;
-
-import com.esri.core.portal.Portal.GetAuthCodeCallback;
+import android.widget.Toast;import com.esri.core.portal.Portal.GetAuthCodeCallback;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
 
@@ -31,6 +29,7 @@ public class GlobalState  {
 	private STYLE style = (STYLE) SimpleMarkerSymbol.STYLE.DIAMOND;
 	private int textSize = 10;
 	private String serverAddress = "http://192.168.43.185:8000";
+	private int myId = 3;
 	
 	//minTime minimum time interval between location updates, in milliseconds
 	private long timeIntervalLoctionUpdate = 5000; 
@@ -154,5 +153,12 @@ public class GlobalState  {
 	public void setSqliteRouteId(long sqliteRouteId) {
 		this.sqliteRouteId = sqliteRouteId;
 	}
-	
+
+	public int getMyId() {
+		return myId;
+	}
+
+	public void setMyId(int myId) {
+		this.myId = myId;
+	}
 }
