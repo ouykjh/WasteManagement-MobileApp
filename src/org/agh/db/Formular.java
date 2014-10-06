@@ -3,16 +3,34 @@ package org.agh.db;
 public class Formular {
 	int id;
 	long routeId;
-	double longitude;
-	double latitude;
+	long pointId;
+	long mobileUserId;
+	int amountOfBins;
+	int percentageFilling;
 	
 	public Formular(){
 	}
 	
-	public Formular(long routeId, double longitude, double latitude) {
+	public Formular(long routeId, int amountOfBins, int percentageFilling) {
 		this.routeId = routeId;
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.amountOfBins = amountOfBins;
+		this.percentageFilling = percentageFilling;
+	}
+	
+	public long getPointId() {
+		return pointId;
+	}
+
+	public void setPointId(long pointId) {
+		this.pointId = pointId;
+	}
+
+	public long getMobileUserId() {
+		return mobileUserId;
+	}
+
+	public void setMobileUserId(long mobileUserId) {
+		this.mobileUserId = mobileUserId;
 	}
 	
 	public int getId() {
@@ -22,22 +40,27 @@ public class Formular {
 		this.id = id;
 	}
 	
+	public int getAmountOfBins() {
+		return amountOfBins;
+	}
+
+	public void setAmountOfBins(int amountOfBins) {
+		this.amountOfBins = amountOfBins;
+	}
+
+	public int getPercentageFilling() {
+		return percentageFilling;
+	}
+
+	public void setPercentageFilling(int percentageFilling) {
+		this.percentageFilling = percentageFilling;
+	}
+
 	public long getRouteId() {
 		return routeId;
 	}
 	public void setRouteId(long routeId2) {
 		this.routeId = routeId2;
 	}
-	public double getLongitude() {
-		return longitude;
-	}
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-	public double getLatitude() {
-		return latitude;
-	}
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
+	
 }

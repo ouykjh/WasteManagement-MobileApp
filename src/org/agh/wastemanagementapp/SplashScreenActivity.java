@@ -128,7 +128,7 @@ public class SplashScreenActivity extends Activity {
 			JSONObject json = null;
 			try{
 				json = jsonArray.getJSONObject(i);
-				PointManagament.pointsList.add(new AddressPoint(json.getDouble("latitude"), json.getDouble("longitude"), j.toString()));
+				PointManagament.pointsList.add(new AddressPoint(json.getLong("id"), json.getDouble("latitude"), json.getDouble("longitude"), j.toString()));
 				++j;
 			}catch(JSONException e){
 				e.printStackTrace();

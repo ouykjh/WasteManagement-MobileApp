@@ -2,9 +2,9 @@ package org.agh.map.managament;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationManager;
+import android.widget.Toast;
 
+import com.esri.core.portal.Portal.GetAuthCodeCallback;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
 
@@ -20,6 +20,9 @@ public class GlobalState  {
 	private String mobileUserRouteId;
 	private String routeId;
 	
+	private boolean createNewRoute = true;
+	private long sqliteRouteId;
+	
 	private int notVisitedColor = Color.WHITE;
 	private int visitedColor = Color.BLUE;
 	private int nextColor = Color.RED;
@@ -34,6 +37,10 @@ public class GlobalState  {
 	
 	//minDistance minimum distance between location updates, in meters
 	private long minDistanceBetweenLocationUpdate = 5;
+	
+	public void showAlertMsg(String message, Context context){
+		Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+	}
 	
 	public int getNotVisitedColor() {
 		return notVisitedColor;
@@ -131,4 +138,21 @@ public class GlobalState  {
 	public void setServerAddres(String serverAddres){
 		this.serverAddress = serverAddres;  
 	}
+
+	public boolean isCreateNewRoute() {
+		return createNewRoute;
+	}
+
+	public void setCreateNewRoute(boolean createNewRoute) {
+		this.createNewRoute = createNewRoute;
+	}
+
+	public long getSqliteRouteId() {
+		return sqliteRouteId;
+	}
+
+	public void setSqliteRouteId(long sqliteRouteId) {
+		this.sqliteRouteId = sqliteRouteId;
+	}
+	
 }

@@ -35,5 +35,7 @@
     <string name="latitude">szerokość</string>
     <string name="longitude">Długość</string>
     <string name="saveToDb">Zapisz w bazie</string>
+    <string name="amountOfBins">Ilość koszy na śmieci</string>
+    <string name="percentageFilling">Procentowe wypełnienie kosza</string>
 
 </resources>

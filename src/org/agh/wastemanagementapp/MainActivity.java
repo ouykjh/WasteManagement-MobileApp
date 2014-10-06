@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -30,7 +31,20 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+			switch(item.getItemId()){
+			case R.id.formular:
+				openFormular();
+				break;
+			default:
+				break;
+			}
+			
+			return true;
+			
+	}
 	private void initUIElements(){
 		btnFollowRoute = (Button) findViewById(R.id.btnFollowRoute);
 		btnSendToDatabase = (Button) findViewById(R.id.btnSendSavedData);
@@ -68,7 +82,7 @@ public class MainActivity extends Activity {
 	private void openMap(){
 		Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
 		if (PointManagament.pointsList.isEmpty())
-			intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+			intent = new Intent(getApplicationContext(), MapActivity.class);
 		startActivity(intent);
 	}
 	
@@ -76,6 +90,10 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(getApplicationContext(), DatabaseViewActivity.class);
 		startActivity(intent);
 	}
-
+	
+	private void openFormular(){
+		Intent intent = new Intent(getApplicationContext(), FormularActivity.class);
+		startActivity(intent);
+	}
 }
 

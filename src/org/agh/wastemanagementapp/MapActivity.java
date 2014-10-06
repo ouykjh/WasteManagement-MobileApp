@@ -10,9 +10,12 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapOptions;
@@ -32,6 +35,24 @@ public class MapActivity extends Activity {
 			*		Just turning of the app
 			*/
 			startTracking();
+		}
+		
+		@Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			// Inflate the menu; this adds items to the action bar if it is present.
+			getMenuInflater().inflate(R.menu.map, menu);
+			return true;
+		}
+		
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item){
+			if(item.getItemId() == R.id.formular){
+				Intent intent = new Intent(getApplicationContext(), FormularActivity.class);
+				startActivity(intent);
+				return true;
+			}
+			return true;
+				
 		}
 		
 		private void startTracking() {
