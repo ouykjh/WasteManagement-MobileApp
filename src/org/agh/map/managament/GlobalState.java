@@ -1,5 +1,13 @@
 package org.agh.map.managament;
 
+import jcifs.util.Base64;
+
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.graphics.Color;
 
 import com.esri.core.symbol.SimpleMarkerSymbol;
@@ -25,9 +33,12 @@ public class GlobalState  {
 	private STYLE style = (STYLE) SimpleMarkerSymbol.STYLE.DIAMOND;
 	private int textSize = 10;
 	private String serverAddress = "http://192.168.43.185:8000";
-	private int myId = 3;
-	private String username = "admin";
-	private String password = "123";
+	private int myId = 2;
+	private String login = "admin";
+	private String password = "123qwe";
+	private JSONObject loginJson = new JSONObject();
+	
+
 	
 	//minTime minimum time interval between location updates, in milliseconds
 	private long timeIntervalLoctionUpdate = 5000; 
@@ -37,6 +48,12 @@ public class GlobalState  {
 	
 	public int getNotVisitedColor() {
 		return notVisitedColor;
+	}
+	
+	public JSONObject getLoginJson() throws JSONException{
+		loginJson.put("username", login);
+		loginJson.put("password", password);
+		return loginJson;
 	}
 
 	public void setNotVisitedColor(int notVisitedColor) {
@@ -128,6 +145,14 @@ public class GlobalState  {
 		return serverAddress;
 	}
 	
+	public String getHost(){
+		return serverAddress.substring(0, serverAddress.lastIndexOf(':'));
+	}
+	
+	public int getPort(){
+		return Integer.parseInt(serverAddress.substring(serverAddress.lastIndexOf(':') + 1, serverAddress.length()));
+	}
+	
 	public void setServerAddres(String serverAddres){
 		this.serverAddress = serverAddres;  
 	}
@@ -140,12 +165,12 @@ public class GlobalState  {
 		this.myId = myId;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getLogin() {
+		return login;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public String getPassword() {
@@ -154,5 +179,17 @@ public class GlobalState  {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public void setAuthHeader(HttpGet httpGet){
+		httpGet.setHeader("Authorization", "Basic "+Base64.encode((getLogin() + ":" + getPassword()).getBytes()));
+	}
+	
+	public void setAuthHeader(HttpPost httpPost){
+		httpPost.setHeader("Authorization", "Basic "+Base64.encode((getLogin() + ":" + getPassword()).getBytes()));
+	}
+	
+	public void setAuthHeader(HttpPut httpPost){
+		httpPost.setHeader("Authorization", "Basic "+Base64.encode((getLogin() + ":" + getPassword()).getBytes()));
 	}
 }
