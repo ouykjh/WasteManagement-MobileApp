@@ -4,10 +4,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jcifs.util.Base64;
+
 import org.agh.connector.ApiConnector;
 import org.agh.map.managament.AddressPoint;
 import org.agh.map.managament.GlobalState;
 import org.agh.map.managament.PointManagament;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

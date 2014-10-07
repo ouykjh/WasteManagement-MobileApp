@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 
+import jcifs.util.Base64;
+
 import org.agh.map.managament.GlobalState;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -47,7 +49,7 @@ public class ApiConnector {
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpGet = new HttpGet(mobileUserRouteApiUrl);
-		
+			setAuthHeader(httpGet);
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 		
 			httpEntity = httpResponse.getEntity();
@@ -125,6 +127,7 @@ public class ApiConnector {
 			post.setHeader("Accept", "application/json");
 			post.setHeader("Content-type", "application/json");
 			post.setEntity(se);
+			setAuthHeader(post);
 			HttpResponse response = client.execute(post);
 			String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 			
@@ -143,6 +146,24 @@ public class ApiConnector {
 		return null;
 	}
 	
+	
+	private void setAuthHeader(HttpGet httpGet){
+		httpGet.setHeader("Authorization", "Basic "+Base64.encode((
+				GlobalState.getInstance().getUsername() + 
+				":" + GlobalState.getInstance().getPassword()).getBytes()));
+	}
+	
+	private void setAuthHeader(HttpPost httpPost){
+		httpPost.setHeader("Authorization", "Basic "+Base64.encode((
+				GlobalState.getInstance().getUsername() + 
+				":" + GlobalState.getInstance().getPassword()).getBytes()));
+	}
+	
+	private void setAuthHeader(HttpPut httpPost){
+		httpPost.setHeader("Authorization", "Basic "+Base64.encode((GlobalState.getInstance().getUsername() + 
+				":" + GlobalState.getInstance().getPassword()).getBytes()));
+	}
+	
 	public JSONObject putDataToServer(JSONObject jsonObject, String path) throws JSONException, UnsupportedEncodingException{
 		String fullUrl = url + path;
 		HttpClient client = new DefaultHttpClient();
@@ -155,6 +176,7 @@ public class ApiConnector {
 		try {
 			post.setHeader("Accept", "application/json");
 			post.setHeader("Content-type", "application/json");
+			setAuthHeader(post);
 			post.setEntity(se);
 			HttpResponse response = client.execute(post);
 			Log.i("TRACKER", "response " + response);

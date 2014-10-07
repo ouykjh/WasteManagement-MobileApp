@@ -26,6 +26,8 @@ public class GlobalState  {
 	private int textSize = 10;
 	private String serverAddress = "http://192.168.43.185:8000";
 	private int myId = 3;
+	private String username = "admin";
+	private String password = "123";
 	
 	//minTime minimum time interval between location updates, in milliseconds
 	private long timeIntervalLoctionUpdate = 5000; 
@@ -136,5 +138,21 @@ public class GlobalState  {
 
 	public void setMyId(int myId) {
 		this.myId = myId;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
