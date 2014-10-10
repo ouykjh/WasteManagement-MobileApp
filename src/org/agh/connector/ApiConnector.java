@@ -83,6 +83,7 @@ public class ApiConnector {
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpGet = new HttpGet(getRouteUrl);
+			GlobalState.getInstance().setAuthHeader(httpGet);
 		
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 		
@@ -148,6 +149,7 @@ public class ApiConnector {
 		String fullUrl = url + path;
 		HttpClient client = new DefaultHttpClient();
 		HttpPut put = new HttpPut(fullUrl);
+		GlobalState.getInstance().setAuthHeader(put);
 		String json = "";
 		
 		json = jsonObject.toString();
