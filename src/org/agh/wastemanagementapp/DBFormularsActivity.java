@@ -5,6 +5,7 @@ import java.util.List;
 import org.agh.db.DatabaseHelper;
 import org.agh.db.Formular;
 import org.agh.db.FormularsAdapter;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -74,8 +75,8 @@ public class DBFormularsActivity extends Activity {
 	}
 	
 	private void sendFormulars(){
-		
-	}
+		}
+	
 	
 	private void initListView(){
 		fillListViewData();

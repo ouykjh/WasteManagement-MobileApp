@@ -36,7 +36,9 @@ public class SplashScreenActivity extends Activity {
 		Log.i("HOSTsplash", url);
 		ApiConnector apiConnector = new ApiConnector(url);
 		try {
+			
 			getRouteData(apiConnector);
+			Log.d("GETROUTEE", GlobalState.getInstance().getRouteId());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {

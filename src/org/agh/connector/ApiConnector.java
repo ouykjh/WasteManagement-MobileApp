@@ -127,10 +127,13 @@ public class ApiConnector {
 			post.setEntity(se);
 			HttpResponse response = client.execute(post);
 			String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
-			
+			Log.i("formular", "response " + responseString);
+			JSONObject oj = new JSONObject(responseString);
+			Log.i("formular", "response1 " + oj);
 			//TODO should always return some kind of response... 
 			if( responseString.length() != 0 ){
 				JSONObject obj = new JSONObject(responseString);
+				Log.i("formular", "response " + obj);
 				return obj;
 			}
 		} catch (UnsupportedEncodingException e) {

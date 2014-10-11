@@ -20,6 +20,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -42,7 +43,7 @@ public class FormularActivity extends Activity {
 	private List<String> addresses = new ArrayList<String>();
 	private List<Long> addressesIds = new ArrayList<Long>();
 	
-	private final String FORMULAR_PATH = "/api/formular";
+	private final String FORMULAR_PATH = "/api/formular/";
 	private final String SAVED_MESSAGE = "Formularz zosta³ zapisany!";
 	private final String BINS_AMOUNT_CLEAR = "Pole \" iloœæ koszy \" nie mo¿e byæ puste!";
 	private final String FILL_PERCENTAGE_CLEAR = "Pole \" zawartoœæ procentowa \" nie mo¿e byæ puste!";
@@ -75,12 +76,14 @@ public class FormularActivity extends Activity {
 
 			}
 		});
-		spAddress.setSelection(1);
+		spAddress.setSelection(0);
 	}
 	
 	private void findNearestPoints() {
 		for(AddressPoint ap : PointManagament.pointsList){
-			if(distFrom(ap.getPoint().getX(), ap.getPoint().getY(), getLocation().getLatitude(), getLocation().getLongitude()) < globalState.getMinDistanceBetweenLocationUpdate()){
+			if(distFrom(ap.getPoint().getX(), ap.getPoint().getY(), 50, 19) > globalState.getMinDistanceBetweenLocationUpdate()){
+//			if(distFrom(ap.getPoint().getX(), ap.getPoint().getY(), getLocation().getLatitude(), getLocation().getLongitude()) < globalState.getMinDistanceBetweenLocationUpdate()){
+				Log.i("ADDRESS", ap.getAddress());
 				addresses.add(ap.getAddress());
 				addressesIds.add(ap.getId());
 			}
@@ -105,13 +108,14 @@ public class FormularActivity extends Activity {
 				case R.id.btnSaveToDatabase:
 					saveFormularToDatabase();
 					break;
-				case R.id.btnSend:
-//					try {
-//						sendFormular();
-//					} catch (JSONException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
+				case R.id.btnSendFormular:
+					Log.i("BTNSEND", "clicked");
+					try {
+						sendFormular();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					break;
 				default:
 					break;
@@ -122,23 +126,24 @@ public class FormularActivity extends Activity {
 		btnSend.setOnClickListener(onClickListener);
 	}
 	
+	private void setFormularFields(){
+		formular.setAmountOfBins(Integer.parseInt(etAmountOfBins.getText().toString()));
+		formular.setPercentageFilling(Integer.parseInt(etPercentageFilling.getText().toString()));
+		formular.setMobileUserId(Integer.parseInt(globalState.getMobileUserRouteId()));
+	}
+	
 	private void saveFormularToDatabase(){
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		
 		if (checkFormular()){
 			if(globalState.isCreateNewRoute()){
 				Route route = new Route();
-				//route.setExternalRouteId(Integer.parseInt(globalState.getRouteId()));
-				route.setExternalRouteId(1);
-
+				route.setExternalRouteId(Integer.parseInt(globalState.getRouteId()));
 				route.setName("kuba");
 				globalState.setSqliteRouteId(db.createRoute(route));
 			}
-			formular.setAmountOfBins(Integer.parseInt(etAmountOfBins.getText().toString()));
-			formular.setPercentageFilling(Integer.parseInt(etPercentageFilling.getText().toString()));
+			setFormularFields();
 			formular.setRouteId(globalState.getSqliteRouteId());
-			//formular.setMobileUserId(Integer.parseInt(globalState.getMobileUserRouteId()));
-			formular.setMobileUserId(1);
 
 			db.createFormular(formular);
 			globalState.showAlertMsg(SAVED_MESSAGE, getApplicationContext());
@@ -163,37 +168,51 @@ public class FormularActivity extends Activity {
 		return formular;
 	}
 	
-//	private void sendFormular() throws JSONException{
-//		JSONObject formularJson = new JSONObject();
-//		formularJson.put("pointId", formular.getPointId());
-//		formularJson.put("amountOfBins", formular.getAmountOfBins());
-//		formularJson.put("filledPercentage", formular.getPercentageFilling());
-//		formularJson.put("mobileUserId", formular.getMobileUserId());
-//		new SendFormularTask().execute(formularJson);
-//	}
-//	
-//	private class SendFormularTask extends AsyncTask<JSONObject, Long, Void>{
-//
-//		@Override
-//		protected Void doInBackground(JSONObject... params) {
-//			try {
-//				new ApiConnector(GlobalState.getInstance().getServerAddress()).postDataToServer(params[0], FORMULAR_PATH);
-//			} catch (UnsupportedEncodingException e) {
-//				e.printStackTrace();
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//			return null;
-//		}
-//		
-//	}
+	private void sendFormular() throws JSONException{
+		JSONObject formularJson = new JSONObject();
+		JSONObject mobileUserJson = new JSONObject();
+		JSONObject pointJson = new JSONObject();
+		
+		setFormularFields();
+		mobileUserJson.put("id", formular.getMobileUserId());
+		pointJson.put("id", formular.getPointId());
+		
+		formularJson.put("point", pointJson);
+		Log.i("json", Integer.toString((int) formular.getPointId()));
+		formularJson.put("amountOfBins", formular.getAmountOfBins());
+		Log.i("json", Integer.toString(formular.getAmountOfBins()));
+		formularJson.put("percentageFilling", formular.getPercentageFilling());
+		Log.i("json", Integer.toString(formular.getPercentageFilling()));
+		formularJson.put("mobileUser", mobileUserJson);
+		Log.i("json", Integer.toString((int) formular.getMobileUserId()));
+
+		Log.i("amountOfBins", etAmountOfBins.getText().toString());
+		Log.i("json", formularJson.toString());
+		new SendFormularTask().execute(formularJson);
+	}
+	
+	private class SendFormularTask extends AsyncTask<JSONObject, Long, Void>{
+
+		@Override
+		protected Void doInBackground(JSONObject... params) {
+			try {
+				new ApiConnector(GlobalState.getInstance().getServerAddress()).postDataToServer(params[0], FORMULAR_PATH);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+	}
 	
 	/*TODO 	getLocation should be in
 	 * 		GlobalState
 	 */
 	private Location getLocation(){
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		return location;
 	}
 	

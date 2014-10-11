@@ -41,7 +41,6 @@ public class MainActivity extends Activity {
 			default:
 				break;
 			}
-			
 			return true;
 			
 	}
@@ -82,7 +81,7 @@ public class MainActivity extends Activity {
 	private void openMap(){
 		Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
 		if (PointManagament.pointsList.isEmpty())
-			intent = new Intent(getApplicationContext(), MapActivity.class);
+			intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
 		startActivity(intent);
 	}
 	
