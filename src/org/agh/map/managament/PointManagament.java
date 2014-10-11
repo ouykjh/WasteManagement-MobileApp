@@ -19,10 +19,10 @@ public class PointManagament {
 	private static GlobalState globalState = GlobalState.getInstance();
 	
 	public static void dummyData(){
-		pointsList.add(new AddressPoint(19.914221019, 50.06707139,  "ulica Miechowska 5, 30-055 Krakow"));
-		pointsList.add(new AddressPoint(19.906010424, 50.069732095, "ulica Nawojki 5, 30-072 Krakow"));
-		pointsList.add(new AddressPoint(19.886617101, 50.082377402, "ulica Balicka 5, 30-121 Krakow"));
-		pointsList.add(new AddressPoint(19.885828236, 50.082096763, "ulica Balicka 20, 30-149 Krakow"));
+//		pointsList.add(new AddressPoint(19.914221019, 50.06707139,  "ulica Miechowska 5, 30-055 Krakow"));
+//		pointsList.add(new AddressPoint(19.906010424, 50.069732095, "ulica Nawojki 5, 30-072 Krakow"));
+//		pointsList.add(new AddressPoint(19.886617101, 50.082377402, "ulica Balicka 5, 30-121 Krakow"));
+//		pointsList.add(new AddressPoint(19.885828236, 50.082096763, "ulica Balicka 20, 30-149 Krakow"));
 	}
 	
 	public static Point toWebMercator(Point pnt)
