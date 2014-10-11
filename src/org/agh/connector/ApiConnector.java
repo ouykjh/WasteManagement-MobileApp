@@ -47,7 +47,7 @@ public class ApiConnector {
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpGet = new HttpGet(mobileUserRouteApiUrl);
-		
+			GlobalState.getInstance().setAuthHeader(httpGet);
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 		
 			httpEntity = httpResponse.getEntity();
@@ -83,6 +83,7 @@ public class ApiConnector {
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpGet = new HttpGet(getRouteUrl);
+			GlobalState.getInstance().setAuthHeader(httpGet);
 		
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 		
@@ -116,6 +117,7 @@ public class ApiConnector {
 		String fullUrl = url + path;
 		HttpClient client = new DefaultHttpClient();
 		HttpPost post = new HttpPost(fullUrl);
+		GlobalState.getInstance().setAuthHeader(post);
 		String json = "";
 		
 		json = jsonObject.toString();
@@ -149,17 +151,18 @@ public class ApiConnector {
 	public JSONObject putDataToServer(JSONObject jsonObject, String path) throws JSONException, UnsupportedEncodingException{
 		String fullUrl = url + path;
 		HttpClient client = new DefaultHttpClient();
-		HttpPut post = new HttpPut(fullUrl);
+		HttpPut put = new HttpPut(fullUrl);
+		GlobalState.getInstance().setAuthHeader(put);
 		String json = "";
 		
 		json = jsonObject.toString();
 		StringEntity se = new StringEntity(json);
 
 		try {
-			post.setHeader("Accept", "application/json");
-			post.setHeader("Content-type", "application/json");
-			post.setEntity(se);
-			HttpResponse response = client.execute(post);
+			put.setHeader("Accept", "application/json");
+			put.setHeader("Content-type", "application/json");
+			put.setEntity(se);
+			HttpResponse response = client.execute(put);
 			Log.i("TRACKER", "response " + response);
 			String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 			
