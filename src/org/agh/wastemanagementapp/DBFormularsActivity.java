@@ -1,14 +1,22 @@
 package org.agh.wastemanagementapp;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.agh.connector.ApiConnector;
 import org.agh.db.DatabaseHelper;
 import org.agh.db.Formular;
 import org.agh.db.FormularsAdapter;
+import org.agh.jsoncreators.FormularDataCreator;
+import org.agh.map.managament.GlobalState;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,13 +26,14 @@ import android.widget.Button;
 import android.widget.ListView;
 
 public class DBFormularsActivity extends Activity {
-	private Button btnSelectAll;
-	private Button btnSend;
+	private Button btnSendAll;
 	private ListView lvFormulars;
 
 	private DatabaseHelper db;
 	private FormularsAdapter formularAdapter;
 	private List<Formular> formulars;
+	
+	private final String FORMULAR_PATH = "/api/formular/";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,40 +52,45 @@ public class DBFormularsActivity extends Activity {
 	}
 	private void initUIElements(){
 		lvFormulars = (ListView) findViewById(R.id.listViewFormulars);
-		btnSelectAll = (Button) findViewById(R.id.btnSelectAll);
-		btnSend = (Button) findViewById(R.id.btnSend);
+		btnSendAll = (Button) findViewById(R.id.btnSendAll);
 	}
 	
 	private void initButtonsOnClickListeners(){
 		OnClickListener onClickListener = new OnClickListener(){
 			public void onClick(View v){
 				switch (v.getId()){
-				case R.id.btnSelectAll:
-					selectAllCheckboxes(v);
+				case R.id.btnSendAll:
+					sendFormulars();
 					break;
-				case R.id.btnSend:
-					sendFormulars(); 
-					break;
-				
 				default:
 					break;
 				}
 			}
 		};
-		btnSelectAll.setOnClickListener(onClickListener);
-		btnSend.setOnClickListener(onClickListener);
-	}
-	
-	private void selectAllCheckboxes(View v){
-        int size = lvFormulars.getCount();
-		boolean check = lvFormulars.isItemChecked(0);
-	    for(int i = 0; i < size; i++)
-	        lvFormulars.setItemChecked(i, !check);
+		btnSendAll.setOnClickListener(onClickListener);
 	}
 	
 	private void sendFormulars(){
+		SendFormularTask sendFormularTask;
+		FormularDataCreator formularDataCreator;
+		Log.i("sendFormulars", Integer.toString(formulars.size()));
+		for(int i=0; i<formulars.size(); i++){
+			formularDataCreator = new FormularDataCreator(formulars.get(i));
+			sendFormularTask = new SendFormularTask();
+			sendFormularTask.setJsonFormular(formularDataCreator.createJsonFormular());
+			StartAsyncTaskInParallel(sendFormularTask);
 		}
+		GlobalState.getInstance().showAlertMsg("Wys³ano formularze", getApplicationContext());
+		this.finish();
+	}
 	
+	 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	 private void StartAsyncTaskInParallel(SendFormularTask task) {
+	     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+	         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+	     else
+	         task.execute();
+	 }
 	
 	private void initListView(){
 		fillListViewData();
@@ -86,7 +100,7 @@ public class DBFormularsActivity extends Activity {
 		db = new DatabaseHelper(getApplicationContext());
 		getFormulars();
 		if(formulars.isEmpty())
-			Log.i("yodo", "pusty");
+			Log.i("DBFormular", "empty");
 		formularAdapter = new FormularsAdapter(this, formulars);
 		if (formularAdapter != null)
 			lvFormulars.setAdapter(formularAdapter);
@@ -102,5 +116,29 @@ public class DBFormularsActivity extends Activity {
 		if(db != null)
 			db.close();
 		super.onDestroy();
+	}
+	
+	private class SendFormularTask extends AsyncTask<Void, Long, Void>{
+		private JSONObject jsonFormular; 
+		public void setJsonFormular(JSONObject jsonFormular){
+			this.jsonFormular = jsonFormular;
+		}
+		
+		@Override
+		protected Void doInBackground(Void... arg0) {
+				try {
+					new ApiConnector(GlobalState.getInstance().getServerAddress()).postDataToServer(jsonFormular, FORMULAR_PATH);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			return null;
+		}
+
+		
+		
 	}
 }
