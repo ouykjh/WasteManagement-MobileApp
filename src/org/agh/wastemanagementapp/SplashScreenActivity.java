@@ -1,5 +1,7 @@
 package org.agh.wastemanagementapp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,10 +14,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -26,6 +30,9 @@ public class SplashScreenActivity extends Activity {
 	private String port;
 	private String url;
 	private String routeID;
+	
+	private List<JSONObject> addresses = new ArrayList<JSONObject>();
+	private JSONArray jsonPoints = new JSONArray();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +110,10 @@ public class SplashScreenActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(JSONArray jsonArray){
-			Intent intent = new Intent(SplashScreenActivity.this, MapActivity.class);
 			setRoutePoints(jsonArray);
-			startActivity(intent);
-			finish();
+			ApiConnector apiConnector = new ApiConnector(host);
+			SetAddressesRunner setAddressesRunner = new SetAddressesRunner();
+			setAddressesRunner.execute(apiConnector);
 		}
 		
 	}
@@ -124,14 +131,97 @@ public class SplashScreenActivity extends Activity {
 		
 	}
 	
+	private class GetAddressTask extends AsyncTask<Void, Long, JSONObject>{
+		private String addressId;
+		private ApiConnector apiConnector = new ApiConnector(host);
+		private int taskId;
+		
+		public void setAddressId(String addressId){
+			this.addressId = addressId;
+		}
+		public void setTaskId(int taskId){
+			this.taskId = taskId;
+		}
+		
+		@Override
+		protected JSONObject doInBackground(Void... arg0) {
+			return apiConnector.getAddress(addressId);
+		}
+		
+		@Override
+		protected void onPostExecute(JSONObject jsonObject){
+			setAddresses(taskId, jsonObject);
+			Log.i("back", Boolean.toString(addresses.isEmpty()));
+			Log.i("onPostExecute", "qwere");
+			try {
+				Log.i("onPostExecute", jsonObject.getString("city"));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private class SetAddressesRunner extends AsyncTask<ApiConnector, Long, Void>{
+
+		@Override
+		protected Void doInBackground(ApiConnector... arg0) {
+			Integer j = 0;
+			Log.i("jsonPoints", Integer.toString(jsonPoints.length()));
+			try {
+				while(j.intValue() < jsonPoints.length()) {
+					GetAddressTask getAddressTask = new GetAddressTask();
+					getAddressTask.setTaskId(j);
+					getAddressTask.setAddressId(jsonPoints.getJSONObject(j).getString("address"));
+					StartAsyncTaskInParallel(getAddressTask);
+					j++;
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Void result){
+			Log.i("back1", Boolean.toString(addresses.isEmpty()));
+			Intent intent = new Intent(SplashScreenActivity.this, MapActivity.class);
+			startActivity(intent);
+			finish();
+		}
+		
+	}
+	
+	private void setAddresses(int id, JSONObject jsonAddress){
+		Log.i("setAddress", Boolean.toString(addresses.isEmpty()));
+		try {
+			PointManagament.pointsList.get(id).setAddress(jsonAddress.getString("city") + 
+					" " + jsonAddress.getString("street") + " " + jsonAddress.getString("number"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Log.i("setAddress", PointManagament.pointsList.get(id).getAddress());
+	}
+	
+	 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	 private void StartAsyncTaskInParallel(GetAddressTask task) {
+	     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+	         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+	     else
+	         task.execute();
+	 }
+	
 	public void setRoutePoints(JSONArray jsonArray){
 		Integer j = 1;
+		JSONObject jsonPoint = null;
+		Log.i("jsonArrat.length", Integer.toString(jsonArray.length()));
 		for(int i=0; i<jsonArray.length(); i++){
-			JSONObject json = null;
 			try{
-				json = jsonArray.getJSONObject(i);
-				PointManagament.pointsList.add(new AddressPoint(json.getLong("id"), json.getDouble("latitude"), json.getDouble("longitude"), j.toString()));
-				++j;
+				jsonPoints = jsonArray;
+				jsonPoint = jsonArray.getJSONObject(i);
+				PointManagament.pointsList.add(new AddressPoint(jsonPoint.getLong("id"), jsonPoint.getDouble("latitude"), 
+						jsonPoint.getDouble("longitude"), j.toString()));
 			}catch(JSONException e){
 				e.printStackTrace();
 			}

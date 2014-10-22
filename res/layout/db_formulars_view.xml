@@ -15,14 +15,9 @@
         <Button
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/btnSelectAll"
-            android:text="@string/selectAll"
+            android:id="@+id/btnSendAll"
+            android:text="@string/sendAll"
             android:layout_width="fill_parent"></Button>
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/btnSend"
-            android:text="@string/send"
-            android:layout_width="fill_parent"></Button>
-    	</LinearLayout>
+        
+    </LinearLayout>
 </LinearLayout>

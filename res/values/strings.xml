@@ -29,6 +29,7 @@
     <string name="pref_sync_setting">Ustawienia synchronizacji</string>
     <string name="title_activity_dbformulars">DBFormulars</string>
     <string name="selectAll">Zaznacz wszystkie</string>
+    <string name="sendAll">Wyślij wszystkie</string>
     <string name="send">Wyślij</string>
     <string name="title_activity_formular">FormularActivity</string>
     <string name="formular">Formularz</string>

@@ -79,7 +79,7 @@ public class ApiConnector {
 		Log.i("GEtRoute", url);
 		String routeId = GlobalState.getInstance().getRouteId();
 		Log.i("GEtRoute", "ROUTE ID = " + routeId);
-		String getRouteUrl = ServerAddress + "/api/point/?format=json&routeId=" + routeId;
+		String getRouteUrl = ServerAddress + "/api/point/?format=json&route=" + routeId;
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpGet = new HttpGet(getRouteUrl);
@@ -112,6 +112,45 @@ public class ApiConnector {
 		
 		return jsonArray;
 	}
+	
+	public JSONObject getAddress(String addressId){
+		String ServerAddress = GlobalState.getInstance().getServerAddress();
+		HttpEntity httpEntity = null;
+		Log.i("GEtRoute", "POINT ID = " + addressId);
+		String getRouteUrl = ServerAddress + addressId + "?format=json";
+		try{
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			HttpGet httpGet = new HttpGet(getRouteUrl);
+			GlobalState.getInstance().setAuthHeader(httpGet);
+		
+			HttpResponse httpResponse = httpClient.execute(httpGet);
+		
+			httpEntity = httpResponse.getEntity();
+		} catch (ClientProtocolException e){
+			e.printStackTrace();
+		} catch (IOException e1){
+			e1.printStackTrace();
+		}
+		
+		JSONObject jsonObject = null;
+		
+		if(httpEntity != null){
+			try{
+				String entityResponse = EntityUtils.toString(httpEntity);
+				
+				jsonObject = new JSONObject(entityResponse);
+				Log.i("Entity Response : ", entityResponse);
+
+			}catch(JSONException e){
+				e.printStackTrace();
+			}catch(IOException e1){
+				e1.printStackTrace();
+			}
+		}
+		
+		return jsonObject;
+	}
+
 	
 	public JSONObject postDataToServer(JSONObject jsonObject, String path) throws JSONException, UnsupportedEncodingException{
 		String fullUrl = url + path;

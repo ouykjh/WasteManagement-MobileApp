@@ -8,6 +8,7 @@ import org.agh.connector.ApiConnector;
 import org.agh.db.DatabaseHelper;
 import org.agh.db.Formular;
 import org.agh.db.Route;
+import org.agh.jsoncreators.FormularDataCreator;
 import org.agh.map.managament.AddressPoint;
 import org.agh.map.managament.GlobalState;
 import org.agh.map.managament.PointManagament;
@@ -45,6 +46,7 @@ public class FormularActivity extends Activity {
 	
 	private final String FORMULAR_PATH = "/api/formular/";
 	private final String SAVED_MESSAGE = "Formularz zosta³ zapisany!";
+	private final String SEND_MESSAGE = "Formularz zosta³ wys³any!";
 	private final String BINS_AMOUNT_CLEAR = "Pole \" iloœæ koszy \" nie mo¿e byæ puste!";
 	private final String FILL_PERCENTAGE_CLEAR = "Pole \" zawartoœæ procentowa \" nie mo¿e byæ puste!";
 	
@@ -129,7 +131,8 @@ public class FormularActivity extends Activity {
 	private void setFormularFields(){
 		formular.setAmountOfBins(Integer.parseInt(etAmountOfBins.getText().toString()));
 		formular.setPercentageFilling(Integer.parseInt(etPercentageFilling.getText().toString()));
-		formular.setMobileUserId(Integer.parseInt(globalState.getMobileUserRouteId()));
+		formular.setMobileUserId(globalState.getMyId());
+		
 	}
 	
 	private void saveFormularToDatabase(){
@@ -140,6 +143,7 @@ public class FormularActivity extends Activity {
 				Route route = new Route();
 				route.setExternalRouteId(Integer.parseInt(globalState.getRouteId()));
 				route.setName("kuba");
+				globalState.setCreateNewRoute(false);
 				globalState.setSqliteRouteId(db.createRoute(route));
 			}
 			setFormularFields();
@@ -169,26 +173,16 @@ public class FormularActivity extends Activity {
 	}
 	
 	private void sendFormular() throws JSONException{
-		JSONObject formularJson = new JSONObject();
-		JSONObject mobileUserJson = new JSONObject();
-		JSONObject pointJson = new JSONObject();
+		FormularDataCreator formularDataCreator;
+		JSONObject formularJson;
 		
 		setFormularFields();
-		mobileUserJson.put("id", formular.getMobileUserId());
-		pointJson.put("id", formular.getPointId());
+		formularDataCreator = new FormularDataCreator(formular);
+		formularJson = formularDataCreator.createJsonFormular();
 		
-		formularJson.put("point", pointJson);
-		Log.i("json", Integer.toString((int) formular.getPointId()));
-		formularJson.put("amountOfBins", formular.getAmountOfBins());
-		Log.i("json", Integer.toString(formular.getAmountOfBins()));
-		formularJson.put("percentageFilling", formular.getPercentageFilling());
-		Log.i("json", Integer.toString(formular.getPercentageFilling()));
-		formularJson.put("mobileUser", mobileUserJson);
-		Log.i("json", Integer.toString((int) formular.getMobileUserId()));
-
-		Log.i("amountOfBins", etAmountOfBins.getText().toString());
-		Log.i("json", formularJson.toString());
 		new SendFormularTask().execute(formularJson);
+		globalState.showAlertMsg(SEND_MESSAGE, getApplicationContext());
+		this.finish();
 	}
 	
 	private class SendFormularTask extends AsyncTask<JSONObject, Long, Void>{
