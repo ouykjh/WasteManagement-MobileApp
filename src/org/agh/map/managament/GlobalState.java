@@ -27,6 +27,7 @@ public class GlobalState  {
 	
 	private boolean createNewRoute = true;
 	private long sqliteRouteId;
+	private int formularDistanceFromPoint = 5;
 	
 	private int notVisitedColor = Color.WHITE;
 	private int visitedColor = Color.BLUE;
@@ -213,5 +214,9 @@ public class GlobalState  {
 	
 	public void setAuthHeader(HttpPut httpPost){
 		httpPost.setHeader("Authorization", "Basic "+Base64.encode((getLogin() + ":" + getPassword()).getBytes()));
+	}
+
+	public int getFormularDistanceFromPoint() {
+		return formularDistanceFromPoint;
 	}
 }

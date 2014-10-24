@@ -8,6 +8,7 @@ import org.agh.map.managament.GlobalState;
 import org.agh.map.managament.PointManagament;
 import org.json.JSONException;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,8 @@ public class MapActivity extends Activity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.map);
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayShowHomeEnabled(true);
 			initMap();	
 			/*TODO 	Application should work when server is not responding
 			*		Proper message should be shown instead of

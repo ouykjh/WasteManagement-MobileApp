@@ -31,32 +31,32 @@ public final class R {
     }
     public static final class drawable {
         public static final int custom_btn_shakespeare=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
+        public static final int ic_formular=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0015;
-        public static final int btnFollowRoute=0x7f0a0011;
-        public static final int btnSaveToDatabase=0x7f0a000d;
-        public static final int btnSendAll=0x7f0a0007;
-        public static final int btnSendFormular=0x7f0a000c;
-        public static final int btnSendSavedData=0x7f0a0010;
-        public static final int btnSettings=0x7f0a0012;
-        public static final int cbFormularId=0x7f0a0004;
-        public static final int etAmountOfBins=0x7f0a0009;
-        public static final int etPercentageFilling=0x7f0a000a;
-        public static final int formular=0x7f0a0016;
-        public static final int listViewFormulars=0x7f0a0005;
+        public static final int action_settings=0x7f0a0014;
+        public static final int btnFollowRoute=0x7f0a0010;
+        public static final int btnSaveToDatabase=0x7f0a000c;
+        public static final int btnSendAll=0x7f0a0006;
+        public static final int btnSendFormular=0x7f0a000b;
+        public static final int btnSendSavedData=0x7f0a000f;
+        public static final int btnSettings=0x7f0a0011;
+        public static final int etAmountOfBins=0x7f0a0008;
+        public static final int etPercentageFilling=0x7f0a0009;
+        public static final int formular=0x7f0a0015;
+        public static final int listViewFormulars=0x7f0a0004;
         public static final int listViewRoutes=0x7f0a0002;
-        public static final int llControlButtons=0x7f0a0006;
-        public static final int map=0x7f0a0013;
-        public static final int menu_formular=0x7f0a0014;
+        public static final int llControlButtons=0x7f0a0005;
+        public static final int map=0x7f0a0012;
+        public static final int menu_formular=0x7f0a0013;
         public static final int progressBar1=0x7f0a0000;
-        public static final int spAddress=0x7f0a000f;
+        public static final int spAddress=0x7f0a000e;
         public static final int tvAmountOfBins=0x7f0a0001;
         public static final int tvFormularId=0x7f0a0003;
-        public static final int tvPercentageBinFilling=0x7f0a000e;
-        public static final int tvRouteName=0x7f0a0008;
-        public static final int tvTitle=0x7f0a000b;
+        public static final int tvPercentageBinFilling=0x7f0a000d;
+        public static final int tvRouteName=0x7f0a0007;
+        public static final int tvTitle=0x7f0a000a;
     }
     public static final class layout {
         public static final int activity_splash_screen=0x7f030000;

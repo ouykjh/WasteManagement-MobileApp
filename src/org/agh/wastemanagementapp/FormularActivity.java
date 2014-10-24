@@ -83,8 +83,12 @@ public class FormularActivity extends Activity {
 	
 	private void findNearestPoints() {
 		for(AddressPoint ap : PointManagament.pointsList){
-			if(distFrom(ap.getPoint().getX(), ap.getPoint().getY(), 50, 19) > globalState.getMinDistanceBetweenLocationUpdate()){
-//			if(distFrom(ap.getPoint().getX(), ap.getPoint().getY(), getLocation().getLatitude(), getLocation().getLongitude()) < globalState.getMinDistanceBetweenLocationUpdate()){
+			Log.i("distFrom1", Double.toString(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) ));
+			Log.i("distFrom1", Double.toString(ap.getPoint().getX()));
+			Log.i("distFrom1", Double.toString(ap.getPoint().getY()));
+			Log.i("distFrom1", Double.toString(getLocation().getLatitude()));
+			Log.i("distFrom1", Double.toString(getLocation().getLongitude()));
+			if(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) < globalState.getFormularDistanceFromPoint()){
 				Log.i("ADDRESS", ap.getAddress());
 				addresses.add(ap.getAddress());
 				addressesIds.add(ap.getId());
@@ -206,7 +210,7 @@ public class FormularActivity extends Activity {
 	 */
 	private Location getLocation(){
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		return location;
 	}
 	
@@ -218,8 +222,9 @@ public class FormularActivity extends Activity {
 	               Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
 	               Math.sin(dLng/2) * Math.sin(dLng/2);
 	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	    double dist = (double) (earthRadius * c);
+	    double dist = (double) (earthRadius * c) * 100;
 
 	    return dist;
-	    }
+	    }	
 }
+
