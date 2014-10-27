@@ -1,21 +1,21 @@
 package org.agh.connector;
 
-import java.io.UnsupportedEncodingException;
-import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.agh.jsoncreators.TrackingDataCreator;
-import org.agh.map.managament.GlobalState;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+
+import org.agh.jsoncreators.TrackingDataCreator;
+import org.agh.map.managament.GlobalState;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Tracker {
 	

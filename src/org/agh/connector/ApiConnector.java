@@ -1,8 +1,6 @@
 package org.agh.connector;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
+import android.util.Log;
 
 import org.agh.map.managament.GlobalState;
 import org.apache.http.HttpEntity;
@@ -19,7 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 
 
 public class ApiConnector {
@@ -39,10 +39,45 @@ public class ApiConnector {
 	    int mDay = c.get(Calendar.DAY_OF_MONTH);
 	    return mYear + "-" + mMonth + "-" + mDay;
 	}
-	
+
+    public JSONArray getMobileUser(String name, String password){
+        String serverAddress = GlobalState.getInstance().getServerAddress();
+        String mobileUserUrl = serverAddress + "/api/mobileUser/?format=json&username=" + name;
+        HttpEntity httpEntity = null;
+        try{
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(mobileUserUrl);
+            GlobalState.getInstance().setAuthHeader(httpGet);
+            HttpResponse httpResponse = httpClient.execute(httpGet);
+            if(httpResponse.getStatusLine().getStatusCode() == 401)
+                return null;
+            httpEntity = httpResponse.getEntity();
+        } catch (ClientProtocolException e){
+            e.printStackTrace();
+        } catch (IOException e1){
+            e1.printStackTrace();
+        }
+
+        JSONArray jsonArray = null;
+
+        if(httpEntity != null){
+            try{
+                String entityResponse = EntityUtils.toString(httpEntity);
+                jsonArray = new JSONArray(entityResponse);
+            }catch(JSONException e){
+                e.printStackTrace();
+            }catch(IOException e1){
+                e1.printStackTrace();
+            }
+        }
+
+        return jsonArray;
+    }
+
 	public JSONArray getMobileUserRoute(){
 		String serverAddress = GlobalState.getInstance().getServerAddress();
-		String mobileUserRouteApiUrl = serverAddress + "/api/mobileUserRoute/?format=json&date=" + getCurrentDate();
+        String mobileUser = Integer.toString(GlobalState.getInstance().getMyId());
+		String mobileUserRouteApiUrl = serverAddress + "/api/mobileUserRoute/?format=json&date=" + getCurrentDate() + "&mobileUser=" + mobileUser;
 		HttpEntity httpEntity = null;
 		try{
 			DefaultHttpClient httpClient = new DefaultHttpClient();

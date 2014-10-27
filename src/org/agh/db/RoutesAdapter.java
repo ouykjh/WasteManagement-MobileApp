@@ -1,16 +1,15 @@
 package org.agh.db;
 
-import java.util.List;
-
-import org.agh.wastemanagementapp.R;
-
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
+
+import org.agh.wastemanagementapp.R;
+
+import java.util.List;
 
 public class RoutesAdapter extends ArrayAdapter<Route> {
 	private Activity context;

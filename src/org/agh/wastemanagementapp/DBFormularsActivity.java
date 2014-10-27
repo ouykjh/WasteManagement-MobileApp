@@ -1,17 +1,5 @@
 package org.agh.wastemanagementapp;
 
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
-import org.agh.connector.ApiConnector;
-import org.agh.db.DatabaseHelper;
-import org.agh.db.Formular;
-import org.agh.db.FormularsAdapter;
-import org.agh.jsoncreators.FormularDataCreator;
-import org.agh.map.managament.GlobalState;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -24,6 +12,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+
+import org.agh.connector.ApiConnector;
+import org.agh.db.DatabaseHelper;
+import org.agh.db.Formular;
+import org.agh.db.FormularsAdapter;
+import org.agh.jsoncreators.FormularDataCreator;
+import org.agh.map.managament.GlobalState;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 public class DBFormularsActivity extends Activity {
 	private Button btnSendAll;
@@ -80,7 +80,7 @@ public class DBFormularsActivity extends Activity {
 			sendFormularTask.setJsonFormular(formularDataCreator.createJsonFormular());
 			StartAsyncTaskInParallel(sendFormularTask);
 		}
-		GlobalState.getInstance().showAlertMsg("Wys³ano formularze", getApplicationContext());
+		GlobalState.getInstance().showAlertMsg("Wysï¿½ano formularze", getApplicationContext());
 		this.finish();
 	}
 	
