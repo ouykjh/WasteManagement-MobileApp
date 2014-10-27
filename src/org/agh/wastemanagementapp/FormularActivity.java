@@ -1,22 +1,8 @@
 package org.agh.wastemanagementapp;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.agh.connector.ApiConnector;
-import org.agh.db.DatabaseHelper;
-import org.agh.db.Formular;
-import org.agh.db.Route;
-import org.agh.jsoncreators.FormularDataCreator;
-import org.agh.map.managament.AddressPoint;
-import org.agh.map.managament.GlobalState;
-import org.agh.map.managament.PointManagament;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Context;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -29,7 +15,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
+
+import org.agh.connector.ApiConnector;
+import org.agh.db.DatabaseHelper;
+import org.agh.db.Formular;
+import org.agh.db.Route;
+import org.agh.jsoncreators.FormularDataCreator;
+import org.agh.map.managament.AddressPoint;
+import org.agh.map.managament.GlobalState;
+import org.agh.map.managament.PointManagament;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormularActivity extends Activity {
 	
@@ -45,10 +45,10 @@ public class FormularActivity extends Activity {
 	private List<Long> addressesIds = new ArrayList<Long>();
 	
 	private final String FORMULAR_PATH = "/api/formular/";
-	private final String SAVED_MESSAGE = "Formularz zosta³ zapisany!";
-	private final String SEND_MESSAGE = "Formularz zosta³ wys³any!";
-	private final String BINS_AMOUNT_CLEAR = "Pole \" iloœæ koszy \" nie mo¿e byæ puste!";
-	private final String FILL_PERCENTAGE_CLEAR = "Pole \" zawartoœæ procentowa \" nie mo¿e byæ puste!";
+	private final String SAVED_MESSAGE = "Formularz zostaï¿½ zapisany!";
+	private final String SEND_MESSAGE = "Formularz zostaï¿½ wysï¿½any!";
+	private final String BINS_AMOUNT_CLEAR = "Pole \" iloï¿½ï¿½ koszy \" nie moï¿½e byï¿½ puste!";
+	private final String FILL_PERCENTAGE_CLEAR = "Pole \" zawartoï¿½ï¿½ procentowa \" nie moï¿½e byï¿½ puste!";
 	
 	
 	@Override
@@ -58,7 +58,6 @@ public class FormularActivity extends Activity {
 		initUIElements();
 		initButtonsListener();
 		initSpinner();
-		
 	}
 	
 	private void initSpinner(){
@@ -83,11 +82,11 @@ public class FormularActivity extends Activity {
 	
 	private void findNearestPoints() {
 		for(AddressPoint ap : PointManagament.pointsList){
-			Log.i("distFrom1", Double.toString(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) ));
-			Log.i("distFrom1", Double.toString(ap.getPoint().getX()));
-			Log.i("distFrom1", Double.toString(ap.getPoint().getY()));
-			Log.i("distFrom1", Double.toString(getLocation().getLatitude()));
-			Log.i("distFrom1", Double.toString(getLocation().getLongitude()));
+//			Log.i("distFrom1", Double.toString(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) ));
+//			Log.i("distFrom1", Double.toString(ap.getPoint().getX()));
+//			Log.i("distFrom1", Double.toString(ap.getPoint().getY()));
+//			Log.i("distFrom1", Double.toString(getLocation().getLatitude()));
+//			Log.i("distFrom1", Double.toString(getLocation().getLongitude()));
 			if(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) < globalState.getFormularDistanceFromPoint()){
 				Log.i("ADDRESS", ap.getAddress());
 				addresses.add(ap.getAddress());
@@ -210,7 +209,12 @@ public class FormularActivity extends Activity {
 	 */
 	private Location getLocation(){
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+        if (location != null) {
+            System.out.println("Provider " + provider + " has been selected.");
+        }
 		return location;
 	}
 	

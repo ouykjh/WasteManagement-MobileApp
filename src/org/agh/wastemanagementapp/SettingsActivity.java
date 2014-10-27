@@ -1,11 +1,11 @@
 package org.agh.wastemanagementapp;
- 
-import org.agh.connector.ApiConnector;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
+
+import org.agh.connector.ApiConnector;
  
 public class SettingsActivity extends PreferenceActivity {
  

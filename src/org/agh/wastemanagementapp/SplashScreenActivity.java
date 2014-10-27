@@ -1,19 +1,5 @@
 package org.agh.wastemanagementapp;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.agh.connector.ApiConnector;
-import org.agh.map.managament.AddressPoint;
-import org.agh.map.managament.GlobalState;
-import org.agh.map.managament.PointManagament;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -24,6 +10,20 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
+
+import org.agh.connector.ApiConnector;
+import org.agh.map.managament.AddressPoint;
+import org.agh.map.managament.GlobalState;
+import org.agh.map.managament.PointManagament;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SplashScreenActivity extends Activity {
 	private String host;
@@ -42,19 +42,54 @@ public class SplashScreenActivity extends Activity {
 		url ="http://" + host + ":" + port;
 		Log.i("HOSTsplash", url);
 		ApiConnector apiConnector = new ApiConnector(url);
-		try {
-			
-			getRouteData(apiConnector);
-			Log.d("GETROUTEE", GlobalState.getInstance().getRouteId());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-	
+        try {
+            if(getMobileUserData(apiConnector)) {
+                Log.d("IF", Integer.toString(GlobalState.getInstance().getMyId()));
+                try {
+                    getRouteData(apiConnector);
+                    Log.d("TRY", GlobalState.getInstance().getRouteId());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                returnToLogin();
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private boolean getMobileUserData(ApiConnector apiConnector) throws ExecutionException, InterruptedException, JSONException {
+        GetMobileUserTask getMobileUserTask = new GetMobileUserTask();
+        JSONArray resultArray;
+        JSONObject resultObject;
+        getMobileUserTask.execute(apiConnector);
+        resultArray = getMobileUserTask.get();
+
+        if(resultArray == null){
+            return false;
+        }
+        resultObject = getMobileUserTask.get().getJSONObject(0);
+        Log.i("getMobileUserData", "result Here " + resultObject);
+        String id = resultObject.getString("id");
+        Pattern p = Pattern.compile("\\d+");
+        Matcher m = p.matcher(id);
+        m.find();
+
+        GlobalState.getInstance().setMyId(Integer.parseInt(m.group()));
+        return true;
+    }
+
 	private void getRouteData(ApiConnector apiConnector) throws InterruptedException, ExecutionException, JSONException{
 		JSONArray result = new JSONArray();
 		GetMobileUserRouteTask getMobileUserRouteTask = new GetMobileUserRouteTask();
@@ -93,7 +128,14 @@ public class SplashScreenActivity extends Activity {
 		Log.i("TRACKER", "ADDRESS " + GlobalState.getInstance().getServerAddress());
 		this.routeID = sharedPrefs.getString("prefRoute", "1");
 	}
-	
+
+    private void returnToLogin(){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        GlobalState.getInstance().showAlertMsg("Wrong Login or Password", getApplicationContext());
+        finish();
+    }
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -118,11 +160,13 @@ public class SplashScreenActivity extends Activity {
 		
 	}
 	
-	private class GetMobileUserRouteTask extends AsyncTask<ApiConnector, Long, JSONArray>{
+	private class GetMobileUserTask extends AsyncTask<ApiConnector, Long, JSONArray>{
+        private String name = GlobalState.getInstance().getLogin();
+        private String password = GlobalState.getInstance().getPassword();
 
-		@Override
+        @Override
 		protected JSONArray doInBackground(ApiConnector... params) {
-			return params[0].getMobileUserRoute();
+			return params[0].getMobileUser(name, password);
 		}
 		
 		@Override
@@ -130,7 +174,20 @@ public class SplashScreenActivity extends Activity {
 		}
 		
 	}
-	
+
+    private class GetMobileUserRouteTask extends AsyncTask<ApiConnector, Long, JSONArray>{
+
+        @Override
+        protected JSONArray doInBackground(ApiConnector... params) {
+            return params[0].getMobileUserRoute();
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray){
+        }
+
+    }
+
 	private class GetAddressTask extends AsyncTask<Void, Long, JSONObject>{
 		private String addressId;
 		private ApiConnector apiConnector = new ApiConnector(host);

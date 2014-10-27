@@ -1,13 +1,5 @@
 package org.agh.wastemanagementapp;
 
-import java.io.UnsupportedEncodingException;
-import java.util.concurrent.ExecutionException;
-
-import org.agh.connector.Tracker;
-import org.agh.map.managament.GlobalState;
-import org.agh.map.managament.PointManagament;
-import org.json.JSONException;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +12,14 @@ import android.view.MenuItem;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
+
+import org.agh.connector.Tracker;
+import org.agh.map.managament.GlobalState;
+import org.agh.map.managament.PointManagament;
+import org.json.JSONException;
+
+import java.io.UnsupportedEncodingException;
+import java.util.concurrent.ExecutionException;
 
 public class MapActivity extends Activity {
 		MapView map = null;
@@ -47,11 +47,19 @@ public class MapActivity extends Activity {
 		
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item){
-			if(item.getItemId() == R.id.formular){
-				Intent intent = new Intent(getApplicationContext(), FormularActivity.class);
-				startActivity(intent);
-				return true;
-			}
+            switch (item.getItemId()){
+                case R.id.formular:
+                    openFormular();
+                    break;
+                case R.id.database:
+                openDatabase();
+                    break;
+                case R.id.settings:
+                    openSettings();
+                    break;
+                default:
+                    break;
+            }
 			return true;
 				
 		}
@@ -102,5 +110,20 @@ public class MapActivity extends Activity {
 			super.onResume();
 			map.unpause();
 		}
+
+    private void openSettings(){
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void openDatabase(){
+        Intent intent = new Intent(getApplicationContext(), DatabaseViewActivity.class);
+        startActivity(intent);
+    }
+
+    private void openFormular(){
+        Intent intent = new Intent(getApplicationContext(), FormularActivity.class);
+        startActivity(intent);
+    }
 	}	
 

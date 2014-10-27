@@ -1,7 +1,5 @@
 package org.agh.wastemanagementapp;
 
-import org.agh.map.managament.PointManagament;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+
+import org.agh.map.managament.GlobalState;
+import org.agh.map.managament.PointManagament;
 
 public class MainActivity extends Activity {
-	
-	Button btnFollowRoute;
-	Button btnSendToDatabase;
-	Button btnSettings;
+
+    EditText etLogin;
+    EditText etPassword;
+    Button btnLogin;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,8 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 			switch(item.getItemId()){
-			case R.id.formular:
-				openFormular();
+			case R.id.action_settings:
+				openSettings();
 				break;
 			default:
 				break;
@@ -45,54 +47,37 @@ public class MainActivity extends Activity {
 			
 	}
 	private void initUIElements(){
-		btnFollowRoute = (Button) findViewById(R.id.btnFollowRoute);
-		btnSendToDatabase = (Button) findViewById(R.id.btnSendSavedData);
-		btnSettings = (Button) findViewById(R.id.btnSettings);
+		etLogin = (EditText) findViewById(R.id.etLogin);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
 	}
-	
+
 	private void initButtonsOnClickListeners(){
 		OnClickListener onClickListener = new OnClickListener(){
 			public void onClick(View v){
 				switch (v.getId()){
-				case R.id.btnFollowRoute:
-					openMap();
-					break;
-				case R.id.btnSendSavedData:
-					openDatabase(); 
-					break;
-				case R.id.btnSettings:
-					openSettings(); 
+				case R.id.btnLogin:
+                    loginToApp();
 					break;
 				default:
 					break;
 				}
 			}
 		};
-		btnFollowRoute.setOnClickListener(onClickListener);
-		btnSendToDatabase.setOnClickListener(onClickListener);
-		btnSettings.setOnClickListener(onClickListener);
-	}
-	
-	private void openSettings(){
-		Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-		startActivity(intent);
-	}
-	
-	private void openMap(){
-		Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-		if (PointManagament.pointsList.isEmpty())
-			intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-		startActivity(intent);
-	}
-	
-	private void openDatabase(){
-		Intent intent = new Intent(getApplicationContext(), DatabaseViewActivity.class);
-		startActivity(intent);
+        btnLogin.setOnClickListener(onClickListener);
 	}
 
-	
-	private void openFormular(){
-		Intent intent = new Intent(getApplicationContext(), FormularActivity.class);
-		startActivity(intent);
-	}
+    private void loginToApp(){
+        Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+        GlobalState.getInstance().setLogin(etLogin.getText().toString());
+        GlobalState.getInstance().setPassword(etPassword.getText().toString());
+        startActivity(intent);
+        finish();
+    }
+
+    private void openSettings(){
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+        startActivity(intent);
+    }
+
 }

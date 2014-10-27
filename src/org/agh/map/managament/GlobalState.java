@@ -1,17 +1,19 @@
 package org.agh.map.managament;
 
-import jcifs.util.Base64;
+import android.content.Context;
+import android.graphics.Color;
+import android.widget.Toast;
+
+import com.esri.core.symbol.SimpleMarkerSymbol;
+import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.content.Context;
-import android.graphics.Color;
-import android.widget.Toast;import com.esri.core.portal.Portal.GetAuthCodeCallback;
-import com.esri.core.symbol.SimpleMarkerSymbol;
-import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
+
+import jcifs.util.Base64;
 
 public class GlobalState  {
 	

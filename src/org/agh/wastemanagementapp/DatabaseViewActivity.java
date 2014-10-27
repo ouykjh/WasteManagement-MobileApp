@@ -1,12 +1,5 @@
 package org.agh.wastemanagementapp;
 
-import java.util.List;
-
-import org.agh.db.DatabaseHelper;
-import org.agh.db.Formular;
-import org.agh.db.Route;
-import org.agh.db.RoutesAdapter;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +8,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import org.agh.db.DatabaseHelper;
+import org.agh.db.Route;
+import org.agh.db.RoutesAdapter;
+
+import java.util.List;
 
 public class DatabaseViewActivity extends Activity {
 	private ListView lvRoutes;
