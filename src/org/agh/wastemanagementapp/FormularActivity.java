@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class FormularActivity extends Activity {
 	private Formular formular = new Formular();
 	private List<String> addresses = new ArrayList<String>();
 	private List<Long> addressesIds = new ArrayList<Long>();
+    private LocationManager locationManager;
 	
 	private final String FORMULAR_PATH = "/api/formular/";
 	private final String SAVED_MESSAGE = "Formularz zosta� zapisany!";
@@ -56,10 +58,16 @@ public class FormularActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.formular_view);
 		initUIElements();
+        initLocationManager();
 		initButtonsListener();
 		initSpinner();
 	}
-	
+
+    private void initLocationManager(){
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0 ,0, locationListener);
+    }
+
 	private void initSpinner(){
 		findNearestPoints();
 		
@@ -82,11 +90,11 @@ public class FormularActivity extends Activity {
 	
 	private void findNearestPoints() {
 		for(AddressPoint ap : PointManagament.pointsList){
-//			Log.i("distFrom1", Double.toString(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) ));
-//			Log.i("distFrom1", Double.toString(ap.getPoint().getX()));
-//			Log.i("distFrom1", Double.toString(ap.getPoint().getY()));
-//			Log.i("distFrom1", Double.toString(getLocation().getLatitude()));
-//			Log.i("distFrom1", Double.toString(getLocation().getLongitude()));
+			Log.i("distFrom1", Double.toString(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) ));
+			Log.i("distFrom1", Double.toString(ap.getPoint().getX()));
+			Log.i("distFrom1", Double.toString(ap.getPoint().getY()));
+			Log.i("distFrom1", Double.toString(getLocation().getLatitude()));
+			Log.i("distFrom1", Double.toString(getLocation().getLongitude()));
 			if(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) < globalState.getFormularDistanceFromPoint()){
 				Log.i("ADDRESS", ap.getAddress());
 				addresses.add(ap.getAddress());
@@ -187,7 +195,7 @@ public class FormularActivity extends Activity {
 		globalState.showAlertMsg(SEND_MESSAGE, getApplicationContext());
 		this.finish();
 	}
-	
+
 	private class SendFormularTask extends AsyncTask<JSONObject, Long, Void>{
 
 		@Override
@@ -207,16 +215,34 @@ public class FormularActivity extends Activity {
 	/*TODO 	getLocation should be in
 	 * 		GlobalState
 	 */
-	private Location getLocation(){
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String provider = locationManager.getBestProvider(criteria, false);
-        Location location = locationManager.getLastKnownLocation(provider);
-        if (location != null) {
-            System.out.println("Provider " + provider + " has been selected.");
+    private Location getLocation(){
+        LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,50.0f, locationListener);
+        Location location = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        return location;
+    }
+
+    private final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
         }
-		return location;
-	}
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    };
 	
 	private static double distFrom(double lat1, double lng1, double lat2, double lng2) {
 	    double earthRadius = 6371; //kilometers

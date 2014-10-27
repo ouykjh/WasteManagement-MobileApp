@@ -99,6 +99,7 @@ public class Tracker {
 	    		Log.w("TRACKER", "Location of the device is unknown");
 	    	}else{
 		        Log.i("TRACKER", "Sending location: latitude: " + location.getLatitude() + " longitude " + location.getLongitude());
+
 				JSONObject pointJson = new JSONObject();
 				try {
 					TrackingDataCreator.createPointsData( routeId, Double.toString(location.getLatitude()), Double.toString(location.getLongitude()) );
