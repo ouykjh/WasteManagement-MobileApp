@@ -23,13 +23,6 @@
             android:summary="@string/pref_send_formular_summary"
             android:title="@string/pref_send_formular" >
         </CheckBoxPreference>
-        
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="prefSendReport"
-            android:summary="@string/pref_send_report_summary"
-            android:title="@string/pref_send_report" >
-        </CheckBoxPreference>
  
         <ListPreference
             android:key="prefSyncFrequency"

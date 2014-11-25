@@ -2,6 +2,7 @@ package org.agh.wastemanagementapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -45,6 +46,9 @@ public class FormularActivity extends Activity {
 	private List<String> addresses = new ArrayList<String>();
 	private List<Long> addressesIds = new ArrayList<Long>();
     private LocationManager locationManager;
+    private double longitude = 0;
+    private double latitude = 0;
+    private Location currentLocation = null;
 	
 	private final String FORMULAR_PATH = "/api/formular/";
 	private final String SAVED_MESSAGE = "Formularz zosta� zapisany!";
@@ -64,12 +68,22 @@ public class FormularActivity extends Activity {
 	}
 
     private void initLocationManager(){
+        currentLocation = getLocation();
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0 ,0, locationListener);
     }
 
 	private void initSpinner(){
-		findNearestPoints();
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            findNearestPoints();
+        }
+        else{
+            for(AddressPoint ap : PointManagament.pointsList){
+                addresses.add(ap.getAddress());
+                addressesIds.add(ap.getId());
+                }
+            }
+
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, addresses);
 		spAddress.setAdapter(adapter);
@@ -90,12 +104,12 @@ public class FormularActivity extends Activity {
 	
 	private void findNearestPoints() {
 		for(AddressPoint ap : PointManagament.pointsList){
-			Log.i("distFrom1", Double.toString(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) ));
-			Log.i("distFrom1", Double.toString(ap.getPoint().getX()));
-			Log.i("distFrom1", Double.toString(ap.getPoint().getY()));
-			Log.i("distFrom1", Double.toString(getLocation().getLatitude()));
-			Log.i("distFrom1", Double.toString(getLocation().getLongitude()));
-			if(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), getLocation().getLatitude(), getLocation().getLongitude()) < globalState.getFormularDistanceFromPoint()){
+			Log.i("distFrom1", Double.toString(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), currentLocation.getLatitude(), currentLocation.getLongitude()) ));
+//			Log.i("distFrom1", Double.toString(ap.getPoint().getX()));
+//			Log.i("distFrom1", Double.toString(ap.getPoint().getY()));
+			Log.i("distFrom1Long", Double.toString(currentLocation.getLongitude()));
+			Log.i("distFrom1Latt", Double.toString(currentLocation.getLatitude()));
+			if(distFrom(ap.getPoint().getY(), ap.getPoint().getX(), currentLocation.getLatitude(), currentLocation.getLongitude()) < globalState.getFormularDistanceFromPoint()){
 				Log.i("ADDRESS", ap.getAddress());
 				addresses.add(ap.getAddress());
 				addressesIds.add(ap.getId());
@@ -217,15 +231,19 @@ public class FormularActivity extends Activity {
 	 */
     private Location getLocation(){
         LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,50.0f, locationListener);
-        Location location = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        locManager.requestLocationUpdates(locManager.GPS_PROVIDER,1,0, locationListener);
+//        locManager.requestSingleUpdate(locManager.GPS_PROVIDER, locationListener, getMainLooper());
+        Location location = locManager.getLastKnownLocation(locManager.GPS_PROVIDER);
         return location;
     }
 
     private final LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
+//            Log.i("latt", Double.toString(location.getLatitude()));
+//            Log.i("long", Double.toString(location.getLongitude()));
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
         }
 
         @Override

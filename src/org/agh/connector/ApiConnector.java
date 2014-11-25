@@ -222,40 +222,38 @@ public class ApiConnector {
 		return null;
 	}
 	
-	public JSONObject putDataToServer(JSONObject jsonObject, String path) throws JSONException, UnsupportedEncodingException{
-		String fullUrl = url + path;
-		HttpClient client = new DefaultHttpClient();
-		HttpPut put = new HttpPut(fullUrl);
-		GlobalState.getInstance().setAuthHeader(put);
-		String json = "";
-		
-		json = jsonObject.toString();
-		StringEntity se = new StringEntity(json);
+	public JSONObject putDataToServer(JSONObject jsonObject, String path) throws JSONException, UnsupportedEncodingException {
+        String fullUrl = url + path;
+        HttpClient client = new DefaultHttpClient();
+        HttpPut put = new HttpPut(fullUrl);
+        GlobalState.getInstance().setAuthHeader(put);
+        String json = "";
 
-		try {
-			put.setHeader("Accept", "application/json");
-			put.setHeader("Content-type", "application/json");
-			put.setEntity(se);
-			HttpResponse response = client.execute(put);
-			Log.i("TRACKER", "response " + response);
-			String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
-			
-			//TODO should always return some kind of response... 
-			if( responseString.length() != 0 ){
-				JSONObject obj = new JSONObject(responseString);
-				Log.i("TRACKER", "response " + obj);
+        json = jsonObject.toString();
+        StringEntity se = new StringEntity(json);
 
-				return obj;
-			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
+        try {
+            put.setHeader("Accept", "application/json");
+            put.setHeader("Content-type", "application/json");
+            put.setEntity(se);
+            HttpResponse response = client.execute(put);
+            Log.i("TRACKER", "response " + response);
+            String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 
+            //TODO should always return some kind of response...
+            if (responseString.length() != 0) {
+                JSONObject obj = new JSONObject(responseString);
+                Log.i("TRACKER", "response " + obj);
+
+                return obj;
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

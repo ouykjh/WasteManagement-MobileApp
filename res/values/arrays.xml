@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="syncFrequency">
-        <item name="1">1 min</item>
-        <item name="5">5 min</item>
-        <item name="10">10 min</item>
-        <item name="15">15 min</item>
+        <item name="1">1 sec</item>
+        <item name="5">5 sec</item>
+        <item name="10">10 sec</item>
+        <item name="15">15 sec</item>
         <item name="0">wyłącz synchronizacje</item>
     </string-array>
     <string-array name="syncFrequencyValues">

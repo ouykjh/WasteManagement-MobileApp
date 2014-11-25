@@ -1,10 +1,12 @@
 package org.agh.connector;
 
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.agh.jsoncreators.TrackingDataCreator;

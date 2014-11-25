@@ -4,8 +4,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +44,12 @@ public class MapActivity extends Activity {
 		@Override
 		public boolean onCreateOptionsMenu(Menu menu) {
 			// Inflate the menu; this adds items to the action bar if it is present.
-			getMenuInflater().inflate(R.menu.map, menu);
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+            GlobalState globalState = new GlobalState();
+            String time = sharedPrefs.getString("prefSyncFrequency", "5000");
+            Log.i("time" , time);
+            globalState.setTimeIntervalLoctionUpdate(Integer.parseInt(time)*1000);
+            getMenuInflater().inflate(R.menu.map, menu);
 			return true;
 		}
 		
@@ -89,7 +97,6 @@ public class MapActivity extends Activity {
 		private void initMap(){
 			graphicsLayer = new GraphicsLayer();
 			map = (MapView)findViewById(R.id.map);
-			
 			map.addLayer(graphicsLayer);
 			map.enableWrapAround(true);
 			graphicsLayer.removeAll();
@@ -122,6 +129,7 @@ public class MapActivity extends Activity {
     }
 
     private void openFormular(){
+        Location location = map.getLocationDisplayManager().getLocation();
         Intent intent = new Intent(getApplicationContext(), FormularActivity.class);
         startActivity(intent);
     }
