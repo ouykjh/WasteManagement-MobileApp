@@ -36,29 +36,15 @@ public class SplashScreenActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_splash_screen);
-		initApiConnectorStrings();
-		url ="http://" + host + ":" + port;
-		Log.i("HOSTsplash", url);
-		ApiConnector apiConnector = new ApiConnector(url);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash_screen);
+        initApiConnectorStrings();
+        url = "http://" + host + ":" + port;
+        Log.i("HOSTsplash", url);
+        ApiConnector apiConnector = new ApiConnector(url);
+        boolean access = false;
         try {
-            if(getMobileUserData(apiConnector)) {
-                Log.d("IF", Integer.toString(GlobalState.getInstance().getMyId()));
-                try {
-                    getRouteData(apiConnector);
-                    Log.d("TRY", GlobalState.getInstance().getRouteId());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            else{
-                returnToLogin();
-            }
+            access = getMobileUserData(apiConnector);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -66,7 +52,21 @@ public class SplashScreenActivity extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        if (access) {
+            Log.d("IF", Integer.toString(GlobalState.getInstance().getMyId()));
+            try {
+                getRouteData(apiConnector);
+                Log.d("TRY", GlobalState.getInstance().getRouteId());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            returnToLogin();
+        }
     }
 
     private boolean getMobileUserData(ApiConnector apiConnector) throws ExecutionException, InterruptedException, JSONException {

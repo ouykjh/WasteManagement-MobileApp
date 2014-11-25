@@ -32,6 +32,7 @@ public class DBFormularsActivity extends Activity {
 	private DatabaseHelper db;
 	private FormularsAdapter formularAdapter;
 	private List<Formular> formulars;
+    private Long routeId;
 	
 	private final String FORMULAR_PATH = "/api/formular/";
 
@@ -80,7 +81,8 @@ public class DBFormularsActivity extends Activity {
 			sendFormularTask.setJsonFormular(formularDataCreator.createJsonFormular());
 			StartAsyncTaskInParallel(sendFormularTask);
 		}
-		GlobalState.getInstance().showAlertMsg("Wys�ano formularze", getApplicationContext());
+		GlobalState.getInstance().showAlertMsg("Wysłano formularze", getApplicationContext());
+        db.deleteRoute(routeId);
 		this.finish();
 	}
 	
@@ -108,7 +110,8 @@ public class DBFormularsActivity extends Activity {
 	
 	private void getFormulars() {
 		Intent intent = getIntent();
-		formulars = db.getFormularsByRouteId(intent.getLongExtra("ROUTE_ID", 1));
+        routeId = intent.getLongExtra("ROUTE_ID", 1);
+		formulars = db.getFormularsByRouteId(routeId);
 	}
 
 	@Override
@@ -137,8 +140,5 @@ public class DBFormularsActivity extends Activity {
 				}
 			return null;
 		}
-
-		
-		
 	}
 }
